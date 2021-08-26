@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metafile client="installation">
+	<name>Polish (Poland)</name>
+	<version>4.0.0.1</version>
+	<creationDate>26.08.2021</creationDate>
+	<author>Projekt Joomla!</author>
+	<copyright>Copyright (C) 2005 - 2021 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License wersja 2 lub późniejsza, zobacz LICENSE.txt</license>
+	<files>
+		<filename>joomla.ini</filename>
+	</files>
+	<metadata>
+		<name>Polish (PL)</name>
+		<nativeName>Polski (PL)</nativeName>
+		<tag>pl-PL</tag>
+		<rtl>0</rtl>
+	</metadata>
+	<params/>
+</metafile>

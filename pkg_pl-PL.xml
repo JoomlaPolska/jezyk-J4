@@ -2,8 +2,8 @@
 <extension type="package" method="upgrade">
 	<name>Pakiet języka polskiego (pl-PL)</name>
 	<packagename>pl-PL</packagename>
-	<version>4.0.2.1</version>
-	<creationDate>26.08.2021</creationDate>
+	<version>4.0.2.2</version>
+	<creationDate>27.08.2021</creationDate>
 	<author>Projekt Joomla!</author>
 	<authorEmail>zwiastun@joomla.pl</authorEmail>
 	<authorUrl>https://www.joomla.pl</authorUrl>
@@ -27,10 +27,11 @@
 		</div>
 	]]></description>	
 	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>script.php</scriptfile>
 	<files>
-		<folder type="language" client="site" id="pl-PL">language/pl-PL</folder>
-		<folder type="language" client="administrator" id="pl-PL">administrator/language/pl-PL</folder>
-		<folder type="language" client="api" id="pl-PL">api/language/pl-PL</folder>
+		<file type="language" client="site" id="pl-PL">site_pl-PL.zip</file>
+		<file type="language" client="administrator" id="pl-PL">admin_pl-PL.zip</file>
+		<file type="language" client="api" id="pl-PL">api_pl-PL.zip</file>
 	</files>
 	<updateservers>
 		<server type="collection" priority="1" name="Akredytowane tłumaczenia Joomla!">
@@ -38,3 +39,5 @@
 		</server>
 	</updateservers>
 </extension>
+
+

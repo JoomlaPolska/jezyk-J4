@@ -22,7 +22,7 @@ Teraz sklonuj rozwidlone repozytorium na swoją maszynę. Przejdź na swoje kont
 Otwórz terminal i uruchom następujące polecenie git:
 
 ```
-git clone "url you just copied"
+git clone "url, który właśnie skopiowałeś"
 ```
 gdzie "url, który właśnie skopiowałeś" (bez cudzysłowu) jest adresem url do tego repozytorium (twojego forka tego projektu). Zobacz poprzednie kroki, aby uzyskać adres url.
 
@@ -94,10 +94,10 @@ zamień `<tu-wpisz-swoja-nazwe>` na nazwę gałęzi, którą utworzyłeś wcześ
 
 Jeśli przejdziesz do swojego repozytorium na GitHubie, zobaczysz przycisk  `Compare & pull request` (_Porównaj i wyślij prośbę o rozpatrzenie_). Kliknij na ten przycisk.
 
-Teraz wyślij pull request.
+Teraz wyślij pull request (żądanie scalenia).
 
 
-Zawsze będziemy się starać reagowac na zgłoszenia lub scalać PR tak szybko, jak to możliwe. Otrzymasz wiadomość e-mail z powiadomieniem, gdy zmiany zostaną scalone.
+Zawsze będziemy się starać reagować na zgłoszenia lub scalać PR tak szybko, jak to możliwe. Otrzymasz wiadomość e-mail z powiadomieniem, gdy zmiany zostaną scalone.
 
 
 ### Co dalej?

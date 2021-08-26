@@ -1,95 +1,106 @@
-# Contributing to joomlagerman/joomla
-(german language files for Joomla! 3.9 and up)
+# Współpraca z Joomla!Polska/jezyk-J4 
+(język polski dla Joomla! 4.0 i nowszych)
 
-:+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
+:+1::tada: Po pierwsze, dzięki za poświęcanie czasu, aby wnieść wkład! :tada::+1:
 
-Our [Code of conduct](../CODE_OF_CONDUCT.md). Please read carefully.
+Nasz  [Kodeks postępowania](../CODE_OF_CONDUCT.md). Proszę przeczytać uważnie
 
-Getting started with [git and github](https://guides.github.com/activities/hello-world/). If you don't have git on your machine, [install it]( https://help.github.com/articles/set-up-git/).
-#### *If you're not comfortable with command line, [here are tutorials using GUI tools.]( #tutorials-using-other-tools )*
+Rozpoczęcie pracy z [git i github](https://guides.github.com/activities/hello-world/). Jeśli nie masz git na swoim komputerze, [zainstaluj go]( https://help.github.com/articles/set-up-git/).
+#### *Jeśli nie czujesz się komfortowo z wierszem poleceń, [tutaj są samouczki, jak korzystać z narzedzii GUI.]( #tutorials-using-other-tools )*
 
-## Working with this repository
+## Praca z tym repozytorium
 
-### Fork this repository
+### Sforkuj to repozytorium
 
-Fork this repository by clicking on the fork button on the top of this page.
-This will create a copy of this repository in your account.
+Sforkuj to repozytorium klikając na przycisk "Fork" na górze tej strony.
+Spowoduje to utworzenie kopii tego repozytorium na Twoim koncie.
 
-### Clone the repository
+### Sklonuj repozytorium
 
-Now clone the forked repository to your machine. Go to your GitHub account, open the forked repository, click on the clone button and then click the *copy to clipboard* icon.
+Teraz sklonuj rozwidlone repozytorium na swoją maszynę. Przejdź na swoje konto GitHub, otwórz rozwidlone repozytorium, kliknij przycisk klonowania, a następnie kliknij ikonę *copy to clipboard* (kopiuj do schowka).
 
-Open a terminal and run the following git command:
+Otwórz terminal i uruchom następujące polecenie git:
 
 ```
 git clone "url you just copied"
 ```
-where "url you just copied" (without the quote marks) is the url to this repository (your fork of this project). See the previous steps to obtain the url.
+gdzie "url, który właśnie skopiowałeś" (bez cudzysłowu) jest adresem url do tego repozytorium (twojego forka tego projektu). Zobacz poprzednie kroki, aby uzyskać adres url.
 
-For example:
+Na przykład:
+
+
 ```
-git clone https://github.com/this-is-you/joomla.git
+git clone https://github.com/to-twoje-konto/joomla.git
 ```
-where `this-is-you` is your GitHub username. Here you're copying the contents of the joomla repository on GitHub to your computer.
+gdzie `to-twoje-konto` jest Twoją nazwą użytkownika na GitHubie. Tutaj skopiujesz zawartość repozytorium joomla z GitHuba na swój komputer.
 
-### Create or take an issue
+### Załóż problem lub podejmij się rowiązania (issue)
 
-Go to [Issues](https://github.com/joomlagerman/joomla/issues) and create a new issue or take one open issue to write an PR.  
-Normally no PR without a previous issue. We have the *issue-first principle*.
 
-### Create a branch
 
-Change to the repository directory on your computer (if you are not already there):
+Przejdź do [Issues](https://github.com/JoomlaPolska/jezyk-J4/issues) i utwórz nowy problem lub wykorzystaj otwarty problem do napisania PR.  
+Zazwyczaj nie ma PR bez wcześniejszego zgłoszenia problemu. Mamy *zasadę najpierw _issue_*.
+
+
+### Utwórz rozgałęzienie
+
+Przejdź do katalogu repozytorium na swoim komputerze (jeśli jeszcze tam nie jesteś):
 
 ```
 cd joomla
 ```
-Now create a branch using the `git checkout` command:
+Teraz utwórz gałąź, używając polecenia `git checkout`:
 ```
-git checkout -b <add-your-new-branch-name>
+git checkout -b <tu-nazwa-twojej-nowej-gałęzi>
 ```
 
-For example:
+Na przykład:
 ```
-git checkout -b <issue-number>
+git checkout -b <numer-problemu>
 ```
-(The name of the branch does not need to have a issue-number as branch name, but it's a easy thing to reference th issue here.)
+(Nazwa gałęzi nie musi mieć numeru problemu w nazwie, ale jest to łatwy sposób, aby odnieść się do konkretnego problemu).
 
-### Make necessary changes and commit those changes
+### Dokonaj niezbędnych zmian i zatwierdź te zmiany
 
-Now open all files in a text editor or in a IDE e.g. PhpStorm and change it. Now, save the file.
+Teraz otwórz wszystkie pliki w edytorze tekstowym lub w IDE np. PhpStorm i wprowadź zmiany. Następnie zapisz plik.
 
-If you go to the project directory and execute the command `git status`, you'll see there are changes.
+Jeśli wejdziesz do katalogu projektu i wykonasz polecenie `git status`, zobaczysz, że są zmiany.
 
 
-Add those changes to the branch you just created using the `git add` command:
+Dodaj te zmiany do gałęzi, którą właśnie utworzyłeś używając polecenia `git add`:
 
 ```
 git add .
 ```
 
-Now commit those changes using the `git commit` command:
+Teraz zatwierdź te zmiany, używając komendy `git commit`:
 ```
-git commit -m "e.g. fix #<issue-number>"
+git commit -m "np. łatka #<numer-problemu>"
 ```
-replacing `<issue-number>` with the issue-number.
+zamień `<numer-problemu>` numerem problemu.
 
-### Push changes to GitHub
+### Prześlij zmiany na GitHub
 
-Push your changes using the command `git push`:
+Pchnij swoje zmiany, używając polecenia 
+
+
+`git push`:
 ```
-git push origin <add-your-branch-name>
+git push origin <tu-wpisz-swoja-nazwe>
 ```
-replacing `<add-your-branch-name>` with the name of the branch you created earlier.
+zamień `<tu-wpisz-swoja-nazwe>` na nazwę gałęzi, którą utworzyłeś wcześniej.
 
-### Submit your changes for review
+### Zgłoś swoje zmiany do recenzji
 
-If you go to your repository on GitHub, you'll see a  `Compare & pull request` button. Click on that button.
+Jeśli przejdziesz do swojego repozytorium na GitHubie, zobaczysz przycisk  `Compare & pull request` (_Porównaj i wyślij prośbę o rozpatrzenie_). Kliknij na ten przycisk.
 
-Now submit the pull request.
+Teraz wyślij pull request.
 
-We will always try to edit or merge issues and PRs as soon as possible. You will get a notification email once the changes have been merged.
 
-### Where to go from here?
+Zawsze będziemy się starać reagowac na zgłoszenia lub scalać PR tak szybko, jak to możliwe. Otrzymasz wiadomość e-mail z powiadomieniem, gdy zmiany zostaną scalone.
 
-Congrats!  You just completed the standard _fork -> clone -> edit -> PR_ workflow that you'll encounter often as a contributor!
+
+### Co dalej?
+
+Gratulacje!  Właśnie ukończyłeś standardowy proes pracy _fork -> clone -> edit -> PR_, z którym często będziesz się spotykał jako współtwórca!
+

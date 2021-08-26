@@ -2,7 +2,7 @@
 <extension type="package" method="upgrade">
 	<name>Pakiet języka polskiego (pl-PL)</name>
 	<packagename>pl-PL</packagename>
-	<version>4.0.0.1</version>
+	<version>4.0.1.1</version>
 	<creationDate>26.08.2021</creationDate>
 	<author>Projekt Joomla!</author>
 	<authorEmail>zwiastun@joomla.pl</authorEmail>

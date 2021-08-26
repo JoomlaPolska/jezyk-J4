@@ -6,7 +6,7 @@
 Nasz  [Kodeks postępowania](../CODE_OF_CONDUCT.md). Proszę przeczytać uważnie
 
 Rozpoczęcie pracy z [git i github](https://guides.github.com/activities/hello-world/). Jeśli nie masz git na swoim komputerze, [zainstaluj go]( https://help.github.com/articles/set-up-git/).
-#### *Jeśli nie czujesz się komfortowo z wierszem poleceń, [tutaj są samouczki, jak korzystać z narzedzii GUI.]( #tutorials-using-other-tools )*
+#### *Jeśli nie czujesz się komfortowo z wierszem poleceń, [tutaj są samouczki, jak korzystać z narzedzi GUI.]( #tutorials-using-other-tools )*
 
 ## Praca z tym repozytorium
 
@@ -17,7 +17,7 @@ Spowoduje to utworzenie kopii tego repozytorium na Twoim koncie.
 
 ### Sklonuj repozytorium
 
-Teraz sklonuj rozwidlone repozytorium na swoją maszynę. Przejdź na swoje konto GitHub, otwórz rozwidlone repozytorium, kliknij przycisk klonowania, a następnie kliknij ikonę *copy to clipboard* (kopiuj do schowka).
+Teraz sklonuj rozwidlone repozytorium na swój komputer. Przejdź na swoje konto GitHub, otwórz rozwidlone repozytorium, kliknij przycisk klonowania, a następnie kliknij ikonę *copy to clipboard* (kopiuj do schowka).
 
 Otwórz terminal i uruchom następujące polecenie git:
 

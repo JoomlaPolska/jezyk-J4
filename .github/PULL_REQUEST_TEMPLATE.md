@@ -1,9 +1,11 @@
-Pull Request für Issue # .
+Pull Request do problemu # .
 
-### Zusammenfassung der Änderungen
-
-
-
-### Wo wird der Sprachstring angezeigt / Wie kann getestet werden
+### Streszczenie zmian
 
 
+
+### Gdzie jest wyświetlany ciąg znaków (witryna/zaplecze)?
+(np. zrób zrzut ekranu, podaj ścieżkę względną do ekranu
+
+
+### Jak przetestować

@@ -1,25 +1,27 @@
 ---
 name: basic issue template
 about: Use this template for issues.
-assignees: tecpromotion, zero-24
+assignees: wojsmol, zwiastunsw
 ---
 
-### Was soll verbessert / korrigiert werden
+### Co trzeba zmienić/skorygować?
 
 
 
-### Wo wird der Sprachstring angezeigt (Frontend/Backend)
+### Jakie tłumaczenie byłoby lepsze
 
 
 
-### Was wäre eine bessere Übersetzung / Bezeichnung
+### Gdzie jest wyświetlany ciąg znaków (witryna/zaplecze)?
+(np. zrób zrzut ekranu, podaj ścieżkę względną do ekranu)
+
+
+### Wersja Joomla i wersja polskiego pakietu językowego
 
 
 
-### Joomla Version & Version der deutschen Sprachdatei
+### Dodatkowe informacje
 
 
-
-### Zusätzlichen Informationen
 
 

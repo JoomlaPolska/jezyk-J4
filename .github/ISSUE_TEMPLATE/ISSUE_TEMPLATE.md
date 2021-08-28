@@ -7,9 +7,7 @@ assignees: wojsmol, zwiastunsw
 ### Co trzeba zmienić/skorygować?
 
 
-
 ### Jakie tłumaczenie byłoby lepsze
-
 
 
 ### Gdzie jest wyświetlany ciąg znaków (witryna/zaplecze)?
@@ -17,7 +15,6 @@ assignees: wojsmol, zwiastunsw
 
 
 ### Wersja Joomla! i wersja polskiego pakietu językowego
-
 
 
 ### Dodatkowe informacje

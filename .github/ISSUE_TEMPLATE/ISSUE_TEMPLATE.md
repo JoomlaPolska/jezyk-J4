@@ -1,6 +1,6 @@
 ---
-name: basic issue template
-about: Use this template for issues.
+name: szablon zgłoszenia problemu
+about: Użyj tego szablonu, aby zgłosić problem.
 assignees: wojsmol, zwiastunsw
 ---
 
@@ -16,7 +16,7 @@ assignees: wojsmol, zwiastunsw
 (np. zrób zrzut ekranu, podaj ścieżkę względną do ekranu)
 
 
-### Wersja Joomla i wersja polskiego pakietu językowego
+### Wersja Joomla! i wersja polskiego pakietu językowego
 
 
 

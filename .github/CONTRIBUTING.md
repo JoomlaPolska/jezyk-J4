@@ -12,8 +12,10 @@ Rozpoczęcie pracy z [git i github](https://guides.github.com/activities/hello-w
 
 ### Sforkuj to repozytorium
 
-Sforkuj to repozytorium klikając na przycisk "Fork" na górze tej strony.
+Sforkuj to repozytorium, wybierając na przycisk "Fork" na górze tej strony. 
 Spowoduje to utworzenie kopii tego repozytorium na Twoim koncie.
+
+Zwróć uwagę, na to, którą gałąź repozytorium kopiujesz. Najbardziej aktualne pliki językowe znajdują się zawse w galęzi oznaczonej numerem najbliższej planowanej wersji Joomla, np. pakiet-4.0.3.
 
 ### Sklonuj repozytorium
 

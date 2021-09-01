@@ -32,9 +32,9 @@ Na przykład:
 
 
 ```
-git clone https://github.com/to-twoje-konto/joomla.git
+git clone https://github.com/to-twoje-konto/jezyk-J4.git
 ```
-gdzie `to-twoje-konto` jest Twoją nazwą użytkownika na GitHubie. Tutaj skopiujesz zawartość repozytorium joomla z GitHuba na swój komputer.
+gdzie `to-twoje-konto` jest Twoją nazwą użytkownika na GitHubie. Tutaj skopiujesz zawartość repozytorium jezyk-J4 z GitHuba na swój komputer.
 
 ### Załóż problem lub podejmij się rowiązania (issue)
 
@@ -49,7 +49,7 @@ Zazwyczaj nie ma PR bez wcześniejszego zgłoszenia problemu. Mamy *zasadę najp
 Przejdź do katalogu repozytorium na swoim komputerze (jeśli jeszcze tam nie jesteś):
 
 ```
-cd joomla
+cd jezyk-J4
 ```
 Teraz utwórz gałąź, używając polecenia `git checkout`:
 ```

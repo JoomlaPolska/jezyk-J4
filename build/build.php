@@ -270,7 +270,6 @@ if ($install || $crowdin)
 		$tmpInstallLanguagePath = $tmp . '/install/' . $languageCode;
 
 		system('cp -r ' . $fullpath . '/installation/language/pl-PL/* ' . $tmpInstallLanguagePath);
-		applyTranslationChanges($languageCode, 'install', $tmpInstallLanguagePath);
 		chdir('..');
 	}
 

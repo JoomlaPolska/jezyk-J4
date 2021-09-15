@@ -12,8 +12,10 @@ Rozpoczęcie pracy z [git i github](https://guides.github.com/activities/hello-w
 
 ### Sforkuj to repozytorium
 
-Sforkuj to repozytorium klikając na przycisk "Fork" na górze tej strony.
+Sforkuj to repozytorium, wybierając na przycisk "Fork" na górze tej strony. 
 Spowoduje to utworzenie kopii tego repozytorium na Twoim koncie.
+
+Zwróć uwagę, na to, którą gałąź repozytorium kopiujesz. Najbardziej aktualne pliki językowe znajdują się zawsze w galęzi oznaczonej numerem najbliższej planowanej wersji Joomla, np. pakiet-4.0.3.
 
 ### Sklonuj repozytorium
 
@@ -30,9 +32,9 @@ Na przykład:
 
 
 ```
-git clone https://github.com/to-twoje-konto/joomla.git
+git clone https://github.com/to-twoje-konto/jezyk-J4.git
 ```
-gdzie `to-twoje-konto` jest Twoją nazwą użytkownika na GitHubie. Tutaj skopiujesz zawartość repozytorium joomla z GitHuba na swój komputer.
+gdzie `to-twoje-konto` jest Twoją nazwą użytkownika na GitHubie. Tutaj skopiujesz zawartość repozytorium jezyk-J4 z GitHuba na swój komputer.
 
 ### Załóż problem lub podejmij się rowiązania (issue)
 
@@ -47,7 +49,7 @@ Zazwyczaj nie ma PR bez wcześniejszego zgłoszenia problemu. Mamy *zasadę najp
 Przejdź do katalogu repozytorium na swoim komputerze (jeśli jeszcze tam nie jesteś):
 
 ```
-cd joomla
+cd jezyk-J4
 ```
 Teraz utwórz gałąź, używając polecenia `git checkout`:
 ```

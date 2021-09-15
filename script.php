@@ -325,7 +325,11 @@ class Pkg_plPLInstallerScript extends InstallerScript
 			'/administrator/language/pl-PL/pl-PL.tpl_hathor.sys.ini',
 			'/administrator/language/pl-PL/pl-PL.tpl_isis.ini',
 			'/administrator/language/pl-PL/pl-PL.tpl_isis.sys.ini',
-			'/administrator/language/pl-PL/pl-PL.xml',
+			'/administrator/language/pl-PL/com_csp.ini',
+			'/administrator/language/pl-PL/com_csp.sys.ini',			
+			'/administrator/language/pl-PL/plg_fields_subfields.ini',			
+			'/administrator/language/pl-PL/plg_fields_subfields.sys.ini',					
+			
 			// Frontend
 			'/language/pl-PL/pl-PL.com_ajax.ini',
 			'/language/pl-PL/pl-PL.com_config.ini',
@@ -405,6 +409,7 @@ class Pkg_plPLInstallerScript extends InstallerScript
 			'/language/pl-PL/pl-PL.tpl_protostar.ini',
 			'/language/pl-PL/pl-PL.tpl_protostar.sys.ini',
 			'/language/pl-PL/pl-PL.xml',
+			'/language/pl-PL/com_messages.ini',			
 		);
 	}
 

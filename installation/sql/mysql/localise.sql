@@ -8,9 +8,9 @@
 UPDATE IGNORE `#__extensions` SET `params` = REPLACE(`params`, 'en-GB', 'pl-PL') WHERE `extension_id` = 11;
 
 INSERT INTO `#__extensions` (`extension_id`, `package_id`, `name`, `type`, `element`, `folder`, `client_id`, `enabled`, `access`, `manifest_cache`, `params`, `custom_data`) VALUES
-(602, 604, 'Polski (PL)', 'language', 'pl-PL', '', 0, 1, 1, '{"name":"Polski","type":"language","creationDate":"27.08.2021","author":"Polskie Centrum Joomla","copyright":"Copyright (C) 2005 - 2021 Open Source Matters & Polskie Centrum Joomla. All rights reserved.","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/joomla.pl","version":"4.0.2.2","group":""}' ,'' ,''),
-(603, 604, 'Polski (PL)', 'language', 'pl-PL', '', 1, 1, 1, '{"name":"Polski","type":"language","creationDate":"27.08.2021","author":"Polskie Centrum Joomla","copyright":"Copyright (C) 2005 - 2021 Open Source Matters & Polskie Centrum Joomla. All rights reserved.","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/www.joomla.pl","version":"4.0.2.2","group":""}' ,'' ,''),
-(604, 0, 'Polski pakiet językowy', 'package', 'pkg_pl-PL', '', 0, 1, 1, '{"name":"Polski pakiet językowy","type":"package","creationDate":"27.08.2021","author":"Polskie Centrum Joomla","copyright":"","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/www.joomla.pl","version":"4.0.2.2","group":"","filename":"pkg_pl-PL"}' ,'' ,'');
+(602, 604, 'Polski (PL)', 'language', 'pl-PL', '', 0, 1, 1, '{"name":"Polski","type":"language","creationDate":"15.09.2021","author":"Polskie Centrum Joomla","copyright":"Copyright (C) 2005 - 2021 Open Source Matters & Polskie Centrum Joomla. All rights reserved.","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/joomla.pl","version":"4.0.3.1","group":""}' ,'' ,''),
+(603, 604, 'Polski (PL)', 'language', 'pl-PL', '', 1, 1, 1, '{"name":"Polski","type":"language","creationDate":"15.09.2021","author":"Polskie Centrum Joomla","copyright":"Copyright (C) 2005 - 2021 Open Source Matters & Polskie Centrum Joomla. All rights reserved.","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/www.joomla.pl","version":"4.0.3.1","group":""}' ,'' ,''),
+(604, 0, 'Polski pakiet językowy', 'package', 'pkg_pl-PL', '', 0, 1, 1, '{"name":"Polski pakiet językowy","type":"package","creationDate":"15.09.2021","author":"Polskie Centrum Joomla","copyright":"","authorEmail":"zwiastun@joomla.pl","authorUrl":"http:\/\/www.joomla.pl","version":"4.0.3.1","group":"","filename":"pkg_pl-PL"}' ,'' ,'');
 
 --
 -- Table `#__languages`

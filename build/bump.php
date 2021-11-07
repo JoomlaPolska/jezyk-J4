@@ -272,7 +272,7 @@ foreach ($iterator as $file)
 			if (preg_match('#2005\s+-\s+[0-9]{4}\s+Open\s+Source\s+Matters#', $fileContents) && !preg_match('#2005\s+-\s+' . $year . '\s+Open\s+Source\s+Matters#', $fileContents))
 			{
 				$changeCopyrightDate = true;
-				$fileContents = preg_replace('#2005\s+-\s+[0-9]{4}\s+Open\s+Source\s+Matters#', '2005 - ' . $year . ' Open Source Matters', $fileContents);
+				$fileContents = preg_replace('#2005\s+-\s+[0-9]{4}\s+Open\s+Source\s+Matters#', '2005 - ' . $year . ' Open Source Matters, Inc.', $fileContents);
 				$changedFilesCopyrightDate++;
 			}
 

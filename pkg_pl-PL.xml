@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="package" method="upgrade">
+	<name>Pakiet języka polskiego (pl-PL)</name>
+	<packagename>pl-PL</packagename>
+	<version>4.1.0.1</version>
+	<creationDate>16.02.2022</creationDate>
+	<author>Projekt Joomla!</author>
+	<authorEmail>zwiastun@joomla.pl</authorEmail>
+	<authorUrl>https://www.joomla.pl</authorUrl>
+	<copyright>Copyright (C) 2005 - 2022 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License wersja 2 lub późniejsza, zobacz LICENSE.txt</license>
+	<url>https://www.joomla.pl</url>
+	<packager>Polskie Centrum Joomla</packager>
+	<packagerurl>https://www.joomla.pl</packagerurl>
+	<description>	<![CDATA[
+		<div class="text-center span12"> 
+		<h3>Joomla! 4 - pakiet języka polskiego</h3>
+	
+		<div class="alert alert-info">
+		<h3>Wspieramy Ciebie, więc wesprzyj i nas.</h3>
+		<h3>Przekaż darowiznę przez:</h3>
+		<a class="btn btn-success" href="http://bit.ly/paypal-fundacja">PayPal</a>	
+		<a class="btn btn-success" href="http://bit.ly/przekaz-darowizne-payu">PayU</a> 
+		<a class="btn btn-info" href="http://bit.ly/przekaz-darowizne-pcj">Przelew bankowy</a>
+		<p>Od 2 lutego do 16 lutego otrzymaliśmy darowizny na kwotę 250 PLN. Serdeczne podziękowania dla: Rafał Cz., Andrzej K., Marek P.,  Artur. Ż.  </p>
+		</div>
+		</div>
+	]]></description>	
+	<blockChildUninstall>true</blockChildUninstall>
+	<scriptfile>script.php</scriptfile>
+	<files>
+		<file type="language" client="site" id="pl-PL">site_pl-PL.zip</file>
+		<file type="language" client="administrator" id="pl-PL">admin_pl-PL.zip</file>
+		<file type="language" client="api" id="pl-PL">api_pl-PL.zip</file>
+	</files>
+	<updateservers>
+		<server type="collection" priority="1" name="Akredytowane tłumaczenia Joomla!">
+			https://update.joomla.org/language/translationlist_4.xml
+		</server>
+	</updateservers>
+</extension>
+
+

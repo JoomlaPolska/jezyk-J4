@@ -2,8 +2,8 @@
 <extension type="package" method="upgrade">
 	<name>Pakiet języka polskiego (pl-PL)</name>
 	<packagename>pl-PL</packagename>
-	<version>4.1.0-dev.1</version>
-	<creationDate>15.02.2022</creationDate>
+	<version>4.1.0.1</version>
+	<creationDate>16.02.2022</creationDate>
 	<author>Projekt Joomla!</author>
 	<authorEmail>zwiastun@joomla.pl</authorEmail>
 	<authorUrl>https://www.joomla.pl</authorUrl>
@@ -22,7 +22,7 @@
 		<a class="btn btn-success" href="http://bit.ly/paypal-fundacja">PayPal</a>	
 		<a class="btn btn-success" href="http://bit.ly/przekaz-darowizne-payu">PayU</a> 
 		<a class="btn btn-info" href="http://bit.ly/przekaz-darowizne-pcj">Przelew bankowy</a>
-		<p>Od 8 listopada do 2 lutego otrzymaliśmy darowizny na kwotę 330 PLN. Serdeczne podziękowania dla: Artur. S. Janusz S, Rafał N. oraz firmy Cedrowa Grupa </p>
+		<p>Od 2 lutego do 16 lutego otrzymaliśmy darowizny na kwotę 250 PLN. Serdeczne podziękowania dla: Rafał Cz., Andrzej K., Marek P.,  Artur. Ż.  </p>
 		</div>
 		</div>
 	]]></description>	

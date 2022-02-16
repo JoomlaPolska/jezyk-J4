@@ -2,12 +2,12 @@
 <extension version="3.9" client="site" type="language" method="upgrade">
 	<name>Polish (PL)</name>
 	<tag>pl-PL</tag>
-	<version>3.9.28.1</version>
-	<creationDate>lipiec 2021</creationDate>
+	<version>3.10.6.1</version>
+	<creationDate>16.02.2022</creationDate>
 	<author>Polskie Centrum Joomla!</author>
 	<authorEmail>zwiastun@joomla.pl</authorEmail>
 	<authorUrl>https://www.joomla.pl</authorUrl>
-	<copyright>(C) 2005 - 2021 Open Source Matters. All right reserved.</copyright>
+	<copyright>(C) 2005 - 2022 Open Source Matters. All right reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<description>Język witryny Joomla 3.9.28 - https://www.joomla.pl</description>
 	<files>

@@ -156,7 +156,7 @@ if ($languagePackages || $crowdin)
 			if ($folder === 'full')
 			{
 				system('cp ' . $fullpath . '/pkg_pl-PL.xml ' . $tmpLanguagePathFolder . '/pkg_' . $languageCode . '.xml');
-				system('cp ' . $fullpath . '/script.php ' . $tmpLanguagePathFolder . '/script.php');
+				//system('cp ' . $fullpath . '/script.php ' . $tmpLanguagePathFolder . '/script.php');
 			}
 
 			if ($folder === 'admin')

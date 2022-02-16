@@ -27,15 +27,14 @@
 		<p>Od 15 lipca otrzymalismy 32 (30 osób prywatnych i 2 firmy) darowizn na kwotę 1685 PLN. Serdeczne podziękowania dla  Ariel C., Rafał Cz., Andrzej D., Paweł M., Tadeusz G., Tomasz G. Szymon G., Andrzej K. , Andrzej K., Krzysztof K., Wojciech L., Jarosław L., Tomasz Ł., Janusz M., Krzysztof M., Paweł M., Grzegorz N., Marcin N., Rafał N., Stanisław Z., Marek P., Robert P., Sebastian K., Artur S., Janusz S, Krzysztof S., Robert S., A. Leszek Sz., Grzegorz Sz.  Artur Ż. oraz dla firm:  oraz firm Akumar i Cedrowa Grupa </p>
 		</div>
 		</div>
-	]]></description>
+	]]>
+	</description>
 	<blockChildUninstall>true</blockChildUninstall>
 	<files>
-		<folder type="language" client="site" id="pl-PL">site_pl-PL</folder>
-		<folder type="language" client="administrator" id="pl-PL">admin_pl-PL</folder>
+		<file type="language" client="site" id="pl-PL">site_pl-PL.zip</file>
+		<file type="language" client="administrator" id="pl-PL">admin_pl-PL.zip</file>	
 	</files>
 	<updateservers>
-		<server type="collection" priority="1" name="Accredited Joomla! Translations">
-			https://update.joomla.org/language/translationlist_3.xml
-		</server>
+		<server type="collection" priority="1" name="Accredited Joomla! Translations">https://update.joomla.org/language/translationlist_3.xml</server>
 	</updateservers>
 </extension>

@@ -33,11 +33,9 @@ const PHP_TAB = "\t";
 // File paths.
 $languageXmlFiles = array(
 	'/administrator/language/pl-PL/install.xml',
-	'/administrator/language/pl-PL/langmetadata.xml',
-	'/api/language/pl-PL/install.xml',
-	'/api/language/pl-PL/langmetadata.xml',
+	'/administrator/language/pl-PL/pl-PL.xml',
 	'/language/pl-PL/install.xml',
-	'/language/pl-PL/langmetadata.xml',
+	'/language/pl-PL/pl-PL.xml',
 );
 
 $installerXmlFile =	'/installation/language/pl-PL/langmetadata.xml';

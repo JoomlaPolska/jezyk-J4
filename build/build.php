@@ -26,6 +26,11 @@
  * - php build/build.php --crowdin --v
  * - php build/build.php --install --v
  * - php build/build.php --fullurl "https://github.com/joomla/joomla-cms/releases/download/4.0.0-rc5/Joomla_4.0.0-rc5-Release_Candidate-Full_Package.zip" --v
+ * - php build/build.php --lpackages --v --tagversion "4.1.4v1"
+ * - php build/build.php --crowdin --v --tagversion "4.1.4v1"
+ * - php build/build.php --install --v --tagversion "4.1.4v1"
+ * - php build/build.php --fullurl "https://github.com/joomla/joomla-cms/releases/download/4.1.0-rc1/Joomla_4.1.0-rc1-Release_Candidate-Full_Package.zip" --v  --tagversion "4.1.4v1"
+
  *
  * @package    Joomla.Language
  * @copyright  (C) 2021 J!German <https://www.jgerman.de>
@@ -56,7 +61,7 @@ $tmp      = $here . '/tmp';
 $fullpath = $tmp . '/' . $time;
 
 // Parse input options
-$options = getopt('', ['help', 'fullurl:', 'install', 'lpackages', 'v', 'crowdin']);
+$options = getopt('', ['help', 'fullurl:', 'install', 'lpackages', 'v', 'crowdin', 'tagversion:']);
 
 $showHelp         = isset($options['help']);
 $fullReleaseUrl   = $options['fullurl'] ?? false;
@@ -64,6 +69,7 @@ $install          = isset($options['install']);
 $languagePackages = isset($options['lpackages']);
 $verbose          = isset($options['v']);
 $crowdin          = isset($options['crowdin']);
+$tagVersion       = $options['tagversion'] ?? false;
 
 if ($showHelp)
 {
@@ -71,9 +77,13 @@ if ($showHelp)
 	exit;
 }
 
+if (!$tagVersion)
+{
 // Looking for the latest local tag
 chdir($repo);
 $tagVersion = system($systemGit . ' describe --tags `' . $systemGit . ' rev-list --tags --max-count=1`', $tagVersion);
+}
+
 $remote = 'tags/' . $tagVersion;
 chdir($here);
 
@@ -146,7 +156,7 @@ if ($languagePackages || $crowdin)
 
 		message('Build package: ' . $languageCode, $verbose);
 
-		foreach (['full', 'admin', 'site', 'api'] as $folder)
+		foreach (['full', 'admin', 'site'] as $folder)
 		{
 			$tmpLanguagePath = $tmp . '/tmp_packages/' . $languageCode;
 			$tmpLanguagePathFolder = $tmp . '/tmp_packages/' . $languageCode . '/' . $folder;
@@ -178,17 +188,6 @@ if ($languagePackages || $crowdin)
 				if ($languagePackages)
 				{
 					system('zip -r ' . $tmpLanguagePath . '/full/site_' . $languageCode . '.zip * > /dev/null');
-				}
-			}
-
-			if ($folder === 'api')
-			{
-				system('cp -r ' . $fullpath . '/api/language/pl-PL/* ' . $tmpLanguagePathFolder);
-				chdir($tmpLanguagePathFolder);
-
-				if ($languagePackages)
-				{
-					system('zip -r ' . $tmpLanguagePath . '/full/api_' . $languageCode . '.zip * > /dev/null');
 				}
 			}
 
@@ -232,7 +231,6 @@ if ($fullReleaseUrl)
 
 	message('Copy the polish language stuff in.', $verbose);
 	system('cp -r ' . $fullpath . '/administrator .');
-	system('cp -r ' . $fullpath . '/api .');
 	system('cp -r ' . $fullpath . '/language .');
 	system('cp -r ' . $fullpath . '/installation .');
 	system('cp ' . $fullpath . '/pkg_pl-PL.xml administrator/manifests/packages/pkg_pl-PL.xml');
@@ -294,11 +292,9 @@ if ($crowdin)
 		$tmpLanguagePath = $tmp . '/tmp_packages/' . $languageCode;
 
 		system('mkdir -p administrator/language/' . $languageCode);
-		system('mkdir -p api/language/' . $languageCode);
 		system('mkdir -p language/' . $languageCode);
 
 		system('cp -r ' . $tmpLanguagePath . '/admin/* administrator/language/' . $languageCode . '/');
-		system('cp -r ' . $tmpLanguagePath . '/api/* api/language/' . $languageCode . '/');
 		system('cp -r ' . $tmpLanguagePath . '/site/* language/' . $languageCode . '/');
 		system('cp ' . $tmpLanguagePath . '/full/pkg_' . $languageCode . '.xml pkg_' . $languageCode . '.xml');
 		system('cp ' . $tmpLanguagePath . '/full/script.php script.php');

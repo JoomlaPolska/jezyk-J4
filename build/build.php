@@ -121,7 +121,7 @@ if ($fullReleaseUrl || $languagePackages)
  * These paths are from the repository root without the leading slash
  * Because this is a fresh copy from a git tag, local environment files may be ignored
  */
-$doNotPackage = array(
+$doNotPackage = [
 	'.git',
 	'.github',
 	'.gitattributes',
@@ -132,7 +132,7 @@ $doNotPackage = array(
 	'LICENSE',
 	'README.md',
 	'build',
-);
+];
 
 // Delete the files and folders we exclude from the packages (tests, docs, build, etc.).
 message('Delete folders not included in packages.', $verbose);

@@ -1,0 +1,29 @@
+name: Check PHP Code
+
+on:
+  pull_request:
+    branches:
+      - 5.*-dev
+  push:
+    branches:
+      - 5.*-dev
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  check-php-code:
+    runs-on: ubuntu-latest
+    permissions: read-all
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Check PHP syntax errors
+        uses: StephaneBour/actions-php-lint@8.2
+        with:
+          dir: '.'

@@ -27,7 +27,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
   
-      - name: Check PHP syntax errors
-        uses: StephaneBour/actions-php-lint@${{ matrix.php }}
+      - name: Check PHP syntax errors for PHP 8.1
+        if: matrix.php == '8.1'
+        uses: StephaneBour/actions-php-lint@8.1
+        with:
+          dir: '.'
+
+      - name: Check PHP syntax errors for PHP 8.2
+        if: matrix.php == '8.2'
+        uses: StephaneBour/actions-php-lint@8.2
         with:
           dir: '.'

@@ -9,24 +9,25 @@ on:
       - 5.*-dev
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-    check-php-code:
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          php: ['8.1', '8.2']
-      permissions: read-all
+  check-php-code:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.2']
+    permissions: read-all
   
-      steps:
-        - name: Checkout Source Code
-          uses: actions/checkout@v4
-          with:
-            ref: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
   
-        - name: Check PHP syntax errors
-          uses: StephaneBour/actions-php-lint@${{ matrix.php }}
-          with:
-            dir: '.'
+      - name: Check PHP syntax errors
+        uses: StephaneBour/actions-php-lint@${{ matrix.php }}
+        with:
+          dir: '.'

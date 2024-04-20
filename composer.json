@@ -1,0 +1,7 @@
+{
+    "name": "joomla/jezyk-j4",
+    "description": "Tłumaczenie Joomla!",
+    "type": "project",
+    "license": "GNU/GPL 2.0",
+    "require": {}
+}

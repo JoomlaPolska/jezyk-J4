@@ -2,7 +2,7 @@ name: language-test
 services:
 
   joomla:
-    image: joomla:5.1-php8.3-apache
+    image: joomla:5-php8.3-apache
     restart: unless-stopped
     ports:
       - "80:80"

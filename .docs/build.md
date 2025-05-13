@@ -1,7 +1,7 @@
 # Przygotowanie paczek
 
 ## Wymagania
-- Linus w WMS
+- Linux w WMS
 
 ## Proces budowania
 - Przejdź w terminalu do katalogu repozytorium

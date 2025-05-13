@@ -7,7 +7,7 @@
 - Przejdź w terminalu do katalogu repozytorium
 - Aktualizacji notacji w plikach `php build/bump.php -v 5.1.1 -l 1` (`php build/bump.php -v WERSJA_JOOMLA -l NUMER_AKTUALIZACJI_TLUMACZENIA`)
 - Wykonaj Commit zmian w plikach
-- Stwórz tag nowej wersji (np. v5.1.1.1)
+- Stwórz tag nowej wersji `git tag v5.1.1.1 -m "v5.1.1.1 release"`(np. v5.1.1.1)
 - Stwórz paczkę instalacyjną `php build/build.php --lpackages --tagversion "v5.1.1.1"` (`php build/build.php --lpackages --tagversion "NAZWA_TAGU"`)
 - Wrzuć paczkę na https://downloads.joomla.org/language-packs/translations-joomla5
 - Opublikuj zmiany w https://github.com/JoomlaPolska/jezyk-J4

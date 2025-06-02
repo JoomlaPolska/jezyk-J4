@@ -132,6 +132,8 @@ $doNotPackage = [
 	'LICENSE',
 	'README.md',
 	'build',
+	'.docs',
+	'docker-compose.yml,'
 ];
 
 // Delete the files and folders we exclude from the packages (tests, docs, build, etc.).

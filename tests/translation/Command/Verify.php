@@ -3,6 +3,7 @@
 namespace TranslationTest\Command;
 
 use Composer\Script\Event;
+use En_GBLocalise;
 use Exception;
 use InvalidArgumentException;
 use JsonException;
@@ -35,6 +36,11 @@ final class Verify
 
     protected bool $ignore_obsolete = false;
 
+    protected ?array $en_plural_suffixes = null;
+    protected ?array $plural_suffixes = null;
+
+    protected ?string $language_code = null;
+
     /**
      * @throws JsonException
      */
@@ -55,16 +61,16 @@ final class Verify
 
         $arguments = $event->getArguments();
 
-        if( array_intersect(['help','usage'], $arguments)!==[] ) {
+        if( array_intersect(['--help','--usage'], $arguments)!==[] ) {
             echo PHP_EOL;
             echo "Use: `composer test:translation TAG` (where where TAG is a tag name from https://github.com/joomla/joomla-cms repository)".PHP_EOL;
             echo "Arguments: ".PHP_EOL;
-            echo "\tignore-obsolete - Ignore obsolete strings".PHP_EOL;
-            echo "\thelp|help - Shows this screen".PHP_EOL;
+            echo "\t--ignore-obsolete - Ignore obsolete strings".PHP_EOL;
+            echo "\t--help|--usage - Shows this screen".PHP_EOL;
             die;
         }
 
-        if(in_array('ignore-obsolete', $arguments, true)!==false) {
+        if(array_intersect(['--ignore-obsolete'], $arguments)!==[]) {
             $this->ignore_obsolete = true;
         }
 
@@ -243,6 +249,7 @@ final class Verify
         if( !is_array($translated) ) {
             throw new RuntimeException("Unable to parse translation file: $translated_path");
         }
+
         if( !is_array($original) ) {
             throw new RuntimeException("Unable to parse original file: $original_path");
         }
@@ -300,22 +307,22 @@ final class Verify
         if( $this->missing_count ) {
 
             self::write(PHP_EOL. "Translation <red>test not passed!</red>: ");
-            self::write("- Total phrases found: ".number_format($this->total_phrases_count,0, '', ','));
+            self::write("- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',')).'</yellow>';
 
             if( $this->changed_files_count ) {
-                self::write("- Found $this->changed_files_count translation files changed");
+                self::write("- Found <yellow>$this->changed_files_count</yellow> translation files changed");
             }
 
-            self::write("- Missing $this->missing_count translation phrases");
+            self::write("- Missing <yellow>$this->missing_count</yellow> translation phrases");
 
             if( $this->missing_files_count ) {
-                self::write("- Missing $this->missing_files_count translation files");
+                self::write("- Missing <yellow>$this->missing_files_count</yellow> translation files");
             }
             if( $this->obsolete_count && !$this->ignore_obsolete ) {
-                self::write("- Found $this->obsolete_count obsolete phrases");
+                self::write("- Found <yellow>$this->obsolete_count</yellow> obsolete phrases");
             }
             if( $this->obsolete_files_count ) {
-                self::write("- Found $this->obsolete_files_count obsolete translation files");
+                self::write("- Found <yellow>$this->obsolete_files_count</yellow> obsolete translation files");
             }
 
             exit(1);
@@ -323,15 +330,63 @@ final class Verify
 
         self::write(PHP_EOL.
             "Translation <green>testpassed.</green>: ".PHP_EOL.
-            "- Total phrases found: ".number_format($this->total_phrases_count,0, '', ','));
+            "- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',')).'</yellow>';
     }
 
+    /**
+     * @throws JsonException
+     */
     private function getReleaseTags(): array
     {
         $tags = (new TestHelper())->getURLContents('https://api.github.com/repos/joomla/joomla-cms/releases');
         $tags = json_decode($tags, JSON_OBJECT_AS_ARRAY, 512, JSON_THROW_ON_ERROR);
 
         return array_column($tags, 'tag_name');
+    }
+
+    private function getPluralEnglishSuffixes(): array
+    {
+        if( is_null($this->en_plural_suffixes) ) {
+            require_once $this->path_original.'/language/en-GB/localise.php';
+
+            $suffixes = [];
+            for($i=0, $ic=200; $i<=$ic; $i++) {
+                $suffixes[] = En_GBLocalise::getPluralSuffixes($i);
+            }
+
+            $this->en_plural_suffixes = array_unique($suffixes);
+        }
+
+        return $this->en_plural_suffixes;
+    }
+
+    private function getLanguageCode(): string
+    {
+        if( is_null($this->language_code) ) {
+            $manifests = glob($this->path_root.'/language', GLOB_ONLYDIR);
+            $manifests = array_diff($manifests, ['en-GB']);
+            $this->language_code = current($manifests);
+        }
+
+        return $this->language_code;
+    }
+
+    private function getPluralSuffixes(): array
+    {
+        if( is_null($this->plural_suffixes) ) {
+            var_dump($this->getLanguageCode());die;
+            require_once $this->path_original.'/language/'.$this->getLanguageCode().'/localise.php';
+
+            $suffixes = [];
+            for($i=0, $ic=200; $i<=$ic; $i++) {
+                $className = ucfirst($this->getLanguageCode()).'Localise';
+                $suffixes[] = $$className::getPluralSuffixes($i);
+            }
+
+            $this->plural_suffixes = array_unique($suffixes);
+        }
+
+        return $this->plural_suffixes;
     }
 
 }

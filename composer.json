@@ -15,6 +15,7 @@
     },
     "require": {
         "ext-json": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "ext-curl": "*"
     }
 }

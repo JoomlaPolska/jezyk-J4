@@ -1,0 +1,41 @@
+name: language-test
+services:
+
+  joomla:
+    image: joomla:5-php8.3-apache
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - mariadb
+    environment:
+      JOOMLA_DB_HOST: mariadb
+      JOOMLA_DB_USER: joomla_db
+      JOOMLA_DB_PASSWORD: joomla_db
+      JOOMLA_DB_NAME: joomla_db
+      JOOMLA_SITE_NAME: Test
+      JOOMLA_ADMIN_EMAIL: webmaster@localhost.pl
+      JOOMLA_ADMIN_USERNAME: test
+      JOOMLA_ADMIN_USER: test
+      JOOMLA_ADMIN_PASSWORD: testtesttesttest
+
+  mariadb:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: joomla_db
+      MYSQL_USER: joomla_db
+      MYSQL_PASSWORD: joomla_db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8001:80
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: root
+    links:
+      - mariadb

@@ -2,19 +2,19 @@
 <extension type="package" method="upgrade">
 	<name>Pakiet języka polskiego (pl-PL)</name>
 	<packagename>pl-PL</packagename>
-	<version>5.2.4.1</version>
-	<creationDate>13.05.2025</creationDate>
+	<version>${build.version}</version>
+	<creationDate>${build.date}</creationDate>
 	<author>Projekt Joomla!</author>
 	<authorEmail>artur.stepien@bestproject.pl</authorEmail>
 	<authorUrl>https://www.joomla.pl</authorUrl>
-	<copyright>Copyright (C) 2005 - 2025 Open Source Matters. All rights reserved.</copyright>
+	<copyright>Copyright (C) 2005 - ${build.year} Open Source Matters. All rights reserved.</copyright>
 	<license>GNU General Public License wersja 2 lub późniejsza, zobacz LICENSE.txt</license>
 	<url>https://www.joomla.pl</url>
 	<packager>Polskie Centrum Joomla</packager>
 	<packagerurl>https://www.joomla.pl</packagerurl>
 	<description>	<![CDATA[
 		<div class="text-center span12"> 
-		<h3>Joomla! - pakiet języka polskiego - 5.2.4</h3>
+		<h3>Joomla! - pakiet języka polskiego - ${build.joomlaPatch}</h3>
 		<p><span style="font-weight: normal">Polskie Centrum Joomla zapewnia społeczności kompletne tłumaczenia Joomla!<br />Ich przygotowanie kosztuje wiele czasu i pracy.</span></p>
 		<div class="alert alert-info">
 		<h3>Wspieramy Ciebię, więc wesprzyj i nas.</h3>
@@ -33,7 +33,7 @@
 	</files>
 	<updateservers>
 		<server type="collection" priority="1" name="Akredytowane tłumaczenia Joomla!">
-			https://update.joomla.org/language/translationlist_5.xml
+			https://update.joomla.org/language/translationlist_${build.joomlaMajor}.xml
 		</server>
 	</updateservers>
 </extension>

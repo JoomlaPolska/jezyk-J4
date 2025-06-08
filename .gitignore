@@ -19,3 +19,5 @@ Desktop.ini
 build/tmp/
 
 /vendor/
+build.properties
+.build

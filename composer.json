@@ -3,5 +3,19 @@
     "description": "Tłumaczenie Joomla!",
     "type": "project",
     "license": "GNU/GPL 2.0",
-    "require": {}
+    "scripts": {
+        "build": "phing",
+        "clean": "phing clean",
+        "test:server:start": "docker-compose up -d",
+        "test:server:cleanup": "docker-compose down -v"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phing/phing": "^3"
+    },
+    "require": {
+        "ext-json": "*",
+        "php": "^8.1",
+        "ext-simplexml": "*"
+    }
 }

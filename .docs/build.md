@@ -20,5 +20,5 @@
 
 ## Publikacja zmian w Crowdin i instalatorze Joomla!
 W [joomla/core-translations](https://github.com/joomla/core-translations) powinna być publikowana zawsze najnowsza wersja dla głównej wersji Joomla! (np. 5.3.1 lub 6.0.0).
-  - Skopiuj zmiany z katalogu `./build/crowdin` do repozytorium [JoomlaPolska/core-translations](https://github.com/JoomlaPolska/core-translations)
+  - Skopiuj zmiany z katalogu `./build/core-translations` do repozytorium [JoomlaPolska/core-translations](https://github.com/JoomlaPolska/core-translations)
   - Utwórz PR ze zmian w [JoomlaPolska/core-translations](https://github.com/JoomlaPolska/core-translations) do  [joomla/core-translations](https://github.com/joomla/core-translations)

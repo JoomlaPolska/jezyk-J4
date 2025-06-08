@@ -12,6 +12,8 @@ use SplFileInfo;
 use TranslationTest\TestHelper;
 use FilesystemIterator;
 
+define('_JEXEC', true);
+
 final class Verify
 {
     protected Event $event;
@@ -23,6 +25,8 @@ final class Verify
     protected string $testedReleaseTag = '';
 
     protected TestHelper $helper;
+
+    protected array $translation_constants = [];
 
     protected int $total_phrases_count = 0;
     protected int $missing_count = 0;
@@ -36,7 +40,7 @@ final class Verify
 
     protected bool $ignore_obsolete = false;
 
-    protected ?array $en_plural_suffixes = null;
+    protected ?array $plural_source_prefixes = null;
     protected ?array $plural_suffixes = null;
 
     protected ?string $language_code = null;
@@ -233,7 +237,7 @@ final class Verify
         {
             $translatedPath = $this->findTranslationPath($source_path);
             if( !file_exists($translatedPath) ) {
-                self::write("<red>The translation file $translatedPath doesn't exist in your translation files!</red>");
+                self::write("The translation file <red>$translatedPath</red> doesn't exist in your translation files!");
                 $this->missing_files_count++;
             }
         }
@@ -245,6 +249,8 @@ final class Verify
         $original = parse_ini_file($original_path, false, INI_SCANNER_RAW);
 
         $this->total_phrases_count+= count($translated);
+
+        $this->translation_constants = array_merge($this->translation_constants, $translated);
 
         if( !is_array($translated) ) {
             throw new RuntimeException("Unable to parse translation file: $translated_path");
@@ -265,15 +271,33 @@ final class Verify
         }
 
         foreach( $obsolete_keys as $key=>$value ) {
+
+            if( $this->translationConstantIsPlural($key) ) {
+                continue;
+            }
+
             if( !$this->ignore_obsolete ) {
                 self::write("<gray>- $key</gray> was removed");
             }
+
             $this->obsolete_count++;
             $this->obsolete_phrases[$key] = $translated_path;
         }
 
+
         foreach( $missing_keys as $key=>$value ) {
-            self::write("<red>! $key=\"{$missing_keys[$key]}\" </red> is missing in translation");
+
+            // This is a plural constant so ignore it
+            if( $this->sourceConstantIsPlural($key) ) {
+                continue;
+            }
+
+            // This constant has plural translation so ignore it
+            if( $this->pluralTranslationExists($key) ) {
+                continue;
+            }
+
+            self::write("<red>! $key=\"{$missing_keys[$key]}\"</red> is missing in translation");
             $this->missing_count++;
             $this->missing_phrases[$key] = $translated_path;
         }
@@ -344,49 +368,89 @@ final class Verify
         return array_column($tags, 'tag_name');
     }
 
-    private function getPluralEnglishSuffixes(): array
-    {
-        if( is_null($this->en_plural_suffixes) ) {
-            require_once $this->path_original.'/language/en-GB/localise.php';
-
-            $suffixes = [];
-            for($i=0, $ic=200; $i<=$ic; $i++) {
-                $suffixes[] = En_GBLocalise::getPluralSuffixes($i);
-            }
-
-            $this->en_plural_suffixes = array_unique($suffixes);
-        }
-
-        return $this->en_plural_suffixes;
-    }
-
     private function getLanguageCode(): string
     {
         if( is_null($this->language_code) ) {
-            $manifests = glob($this->path_root.'/language', GLOB_ONLYDIR);
+            $manifests = glob($this->path_root.'/language/*', GLOB_ONLYDIR);
             $manifests = array_diff($manifests, ['en-GB']);
-            $this->language_code = current($manifests);
+            $this->language_code = basename(current($manifests));
         }
 
         return $this->language_code;
     }
 
+    private function translationConstantIsPlural(string $constant): bool
+    {
+        $suffixes = $this->getPluralSuffixes();
+        foreach($suffixes as $suffix) {
+            if(str_ends_with($constant, $suffix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function sourceConstantIsPlural(string $constant): bool
+    {
+        $suffixes = $this->getPluralSourceSuffixes();
+        foreach($suffixes as $suffix) {
+            if(str_ends_with($constant, $suffix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function pluralTranslationExists(string $key): bool
+    {
+        $suffixes = $this->getPluralSuffixes();
+
+        foreach($suffixes as $suffix) {
+            if( array_key_exists($key.$suffix, $this->translation_constants) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function getPluralSuffixes(): array
     {
         if( is_null($this->plural_suffixes) ) {
-            var_dump($this->getLanguageCode());die;
-            require_once $this->path_original.'/language/'.$this->getLanguageCode().'/localise.php';
+            require_once $this->path_root.'/language/'.$this->getLanguageCode().'/localise.php';
 
-            $suffixes = [];
+            $className = ucfirst(str_replace('-','_', $this->getLanguageCode())).'Localise';
             for($i=0, $ic=200; $i<=$ic; $i++) {
-                $className = ucfirst($this->getLanguageCode()).'Localise';
-                $suffixes[] = $$className::getPluralSuffixes($i);
+                $suffixes = $className::getPluralSuffixes($i);
+                foreach( $suffixes as $suffix ) {
+                    $this->plural_suffixes['_'.$suffix] = '';
+                }
             }
 
-            $this->plural_suffixes = array_unique($suffixes);
+            $this->plural_suffixes = array_keys( $this->plural_suffixes);
         }
 
         return $this->plural_suffixes;
+    }
+
+    private function getPluralSourceSuffixes(): array
+    {
+        if( is_null($this->plural_source_prefixes) ) {
+            require_once $this->path_original.'/language/en-GB/localise.php';
+
+            for($i=0, $ic=200; $i<=$ic; $i++) {
+                $suffixes = En_GBLocalise::getPluralSuffixes($i);
+                foreach( $suffixes as $suffix ) {
+                    $this->plural_source_prefixes['_'.$suffix] = '';
+                }
+            }
+
+            $this->plural_source_prefixes = array_keys($this->plural_source_prefixes);
+        }
+
+        return $this->plural_source_prefixes;
     }
 
 }

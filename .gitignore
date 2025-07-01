@@ -5,8 +5,6 @@
 .DS_Store
 .idea
 .vscode
-vendor
-tmp
 
 # OSX #
 ._*
@@ -19,4 +17,7 @@ Desktop.ini
 
 # Build files
 build/tmp/
+
+/vendor/
+build.properties
 .build

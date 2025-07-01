@@ -1,5 +1,5 @@
 --
--- Zamania na polskie
+-- Zamiana na polskie
 --
 
 --
@@ -32,7 +32,7 @@ UPDATE IGNORE `#__usergroups` SET `title` = 'Zarejestrowani' WHERE `id` = 2;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Autorzy' WHERE `id` = 3;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Superużytkownicy' WHERE `id` = 8;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Goście' WHERE `id` = 9;
-UPDATE IGNORE `#__usergroups` SET `title` = 'Redaktarzy' WHERE `id` = 4;
+UPDATE IGNORE `#__usergroups` SET `title` = 'Redaktorzy' WHERE `id` = 4;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Wydawcy' WHERE `id` = 5;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Operatorzy' WHERE `id` = 6;
 UPDATE IGNORE `#__usergroups` SET `title` = 'Administratorzy' WHERE `id` = 7;
@@ -60,7 +60,7 @@ UPDATE IGNORE `#__modules` SET `title` = 'Podmenu zaplecza' WHERE `id` = 13;
 UPDATE IGNORE `#__modules` SET `title` = 'Tytuł' WHERE `id` = 15;
 UPDATE IGNORE `#__modules` SET `title` = 'Formularz logowania' WHERE `id` = 16;
 UPDATE IGNORE `#__modules` SET `title` = 'Ścieżka powrotu' WHERE `id` = 17;
-UPDATE IGNORE `#__modules` SET `title` = 'Wielojezyczność' WHERE `id` = 79;
+UPDATE IGNORE `#__modules` SET `title` = 'Wielojęzyczność' WHERE `id` = 79;
 UPDATE IGNORE `#__modules` SET `title` = 'Wersja Joomla' WHERE `id` = 86;
 UPDATE IGNORE `#__modules` SET `title` = 'Przykładowe dane' WHERE `id` = 87;
 UPDATE IGNORE `#__modules` SET `title` = 'Ostatnie działania' WHERE `id` = 88;

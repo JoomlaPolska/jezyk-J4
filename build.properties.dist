@@ -1,0 +1,10 @@
+package=JoomlaPolska
+subpackage=Translation
+build.version=
+build.release=
+copyrights=Projekt Joomla!
+license.name=GNU GPL 2.0
+license.url=https://www.gnu.org/licenses/gpl-2.0.txt
+author.url=https://joomla.pl
+author.name=Projekt Joomla!
+author.email=artur.stepien@bestproject.pl

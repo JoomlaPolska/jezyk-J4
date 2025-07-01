@@ -1,17 +1,24 @@
-# Przygotowanie paczek
+# Przygotowanie języka
 
 ## Wymagania
-- Linux w WMS
+- System Windows/Linux
+- PHP 8.1+ (dostępne globalnie, sprawdź wpisując w konsoli `php --version`)
+- Composer (dostępny globalnie, sprawdź wpisując w konsoli `composer --version`)
 
 ## Proces budowania
-- Przejdź w terminalu do katalogu repozytorium
-- Aktualizacji notacji w plikach `php build/bump.php -v 5.1.1 -l 1` (`php build/bump.php -v WERSJA_JOOMLA -l NUMER_AKTUALIZACJI_TLUMACZENIA`)
-- Wykonaj Commit zmian w plikach
-- Stwórz tag nowej wersji `git tag v5.1.1.1 -m "v5.1.1.1 release"`(np. v5.1.1.1)
-- Stwórz paczkę instalacyjną `php build/build.php --lpackages --tagversion "v5.1.1.1"` (`php build/build.php --lpackages --tagversion "NAZWA_TAGU"`)
-- Wrzuć paczkę na https://downloads.joomla.org/language-packs/translations-joomla5
+- Przejdź w terminalu do katalogu głównym repozytorium
+- Wpisz w `build.properties` w stałej `build.version` wersję tłumaczenia (np. `5.4.1.1`)
+- Uruchom proces budowania paczki wykonując komendę `composer build`
+- Gotowa paczka instalacyjna znajdzie się w `.build/pl-PL_joomla_lang_full_v5.4.1v1.zip`
+
+## Publikacja tłumaczenia
+- Wrzuć paczkę instalacyjną na https://downloads.joomla.org/language-packs/translations-joomla5
 - Opublikuj zmiany w https://github.com/JoomlaPolska/jezyk-J4
-  - Utwórz release dla utworzonego tagu
-  - Wrzuć do release utworzony plik instalacyjny tłumaczenia np. `pl-PL_joomla_lang_full_v5.1.2.1.zip`
-- Stwórz zmiany dla Crowdin `php build/build.php --crowdin --tagversion "v5.1.1.1"` (`php build/build.php --crowdin --tagversion "NAZWA_TAGU"`)
-- Stwórz zmiany dla Pakietu instalacyjnego `php build/build.php --install --tagversion "v5.1.1.1"` (`php build/build.php --install --tagversion "NAZWA_TAGU"`)
+  - Utwórz tag dla nowej wersji 
+  - Utwórz release z tego tagu
+  - Wrzuć do release utworzony plik instalacyjny tłumaczenia np. `pl-PL_joomla_lang_full_v5.4.1.1.zip`
+
+## Publikacja zmian w Crowdin i instalatorze Joomla!
+W [joomla/core-translations](https://github.com/joomla/core-translations) powinna być publikowana zawsze najnowsza wersja dla głównej wersji Joomla! (np. 5.3.1 lub 6.0.0).
+  - Skopiuj zmiany z katalogu `./build/core-translations` do repozytorium [JoomlaPolska/core-translations](https://github.com/JoomlaPolska/core-translations)
+  - Utwórz PR ze zmian w [JoomlaPolska/core-translations](https://github.com/JoomlaPolska/core-translations) do  [joomla/core-translations](https://github.com/joomla/core-translations)

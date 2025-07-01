@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JoomlaPolska" default="build:clean" basedir="." description="Polish translation for Joomla! build script.">
+
+    <property file="./build.properties"/>
+
+    <php expression="date('Y-m-d')" returnProperty="build.date"/>
+    <php expression="date('Y')" returnProperty="build.year"/>
+    <php expression="substr('${build.version}', 0, strrpos('${build.version}','.'))" returnProperty="build.joomlaPatch"/>
+    <php expression="substr('${build.joomlaPatch}', 0, strrpos('${build.joomlaPatch}','.'))" returnProperty="build.joomlaMinor"/>
+    <php expression="substr('${build.joomlaMinor}', 0, strrpos('${build.joomlaMinor}','.'))" returnProperty="build.joomlaMajor"/>
+    <php expression="substr('${build.version}', strrpos('${build.version}','.')+1)" returnProperty="build.translationRevision"/>
+
+    <target name="test">
+        <echo msg="There are no tests for now"/>
+    </target>
+
+    <target name="build:lang_polish">
+
+        <echo msg="===== TRANSLATION PACKAGE ====="/>
+
+        <echo msg="Creating installer directories"/>
+
+        <mkdir dir="./.build/package"/>
+        <mkdir dir="./.build/package/administrator" />
+        <mkdir dir="./.build/package/administrator/language" />
+        <mkdir dir="./.build/package/administrator/language/pl-PL" />
+        <mkdir dir="./.build/package/api"/>
+        <mkdir dir="./.build/package/api/language"/>
+        <mkdir dir="./.build/package/api/language/pl-PL"/>
+        <mkdir dir="./.build/package/site"/>
+        <mkdir dir="./.build/package/site/language"/>
+        <mkdir dir="./.build/package/site/language/pl-PL"/>
+
+        <echo msg="Prepare translation files" />
+
+        <copy todir="./.build/package/administrator/language/pl-PL">
+            <fileset dir="./administrator/language/pl-PL">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <copy todir="./.build/package/api/language/pl-PL">
+            <fileset dir="./api/language/pl-PL">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <copy todir="./.build/package/site/language/pl-PL">
+            <fileset dir="./language/pl-PL">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <echo msg="Build packages" />
+
+        <zip destfile="./.build/package/admin_pl-PL.zip" basedir="./.build/package/administrator/language/pl-PL" />
+        <zip destfile="./.build/package/api_pl-PL.zip" basedir="./.build/package/api/language/pl-PL" />
+        <zip destfile="./.build/package/site_pl-PL.zip" basedir="./.build/package/site/language/pl-PL" />
+
+        <copy todir="./.build/package/">
+            <fileset dir="./">
+                <include name="script.php"/>
+                <include name="pkg_pl-PL.xml"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <echo msg="Creating all-in-one package"/>
+
+        <zip destfile="./.build/pl-PL_joomla_lang_full_v${build.joomlaPatch}v${build.translationRevision}.zip">
+            <fileset dir="./.build/package">
+                <include name="admin_pl-PL.zip" />
+                <include name="api_pl-PL.zip" />
+                <include name="site_pl-PL.zip" />
+                <include name="pkg_pl-PL.xml" />
+                <include name="script.php" />
+            </fileset>
+        </zip>
+
+    </target>
+
+    <target name="build:crowdin">
+
+        <echo msg="===== CROWDIN CHANGES ====="/>
+
+        <echo msg="Creating crowdin directories"/>
+
+        <mkdir dir="./.build/core-translations"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/core"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/core/installation"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/core/installation/language"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package"/>
+        <mkdir dir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package/pl-PL"/>
+
+        <echo msg="Preparing the files"/>
+
+        <copy todir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/core/installation/language/pl-PL">
+            <fileset dir="./installation/language/pl-PL">
+                <include name="**/*"/>
+            </fileset>
+            <filterchain>
+                <expandproperties/>
+            </filterchain>
+        </copy>
+
+        <copy todir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package/pl-PL/administrator">
+            <fileset dir=".build/package/administrator/">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package/pl-PL/language">
+            <fileset dir=".build/package/site/language">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+        <copy todir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package/pl-PL/api">
+            <fileset dir=".build/package/api/">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="./.build/core-translations/joomla_v${build.joomlaMajor}/translations/package/pl-PL">
+            <fileset dir=".build/package/">
+                <include name="script.php"/>
+                <include name="pkg_pl-PL.xml"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="build">
+        <phingcall target="test"/>
+
+        <echo msg="Creating build directory ./.build"/>
+        <mkdir dir="./.build"/>
+
+        <phingcall target="build:lang_polish"/>
+        <phingcall target="build:crowdin"/>
+
+    </target>
+
+    <target name="clean">
+        <echo msg="Removing build directory ./.build if exists"/>
+        <delete dir="./.build" includeemptydirs="true"/>
+    </target>
+
+    <target name="build:clean">
+        <echo msg="Creating a clean build"/>
+        <phingcall target="clean"/>
+        <phingcall target="build"/>
+    </target>
+
+</project>

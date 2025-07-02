@@ -1,0 +1,29 @@
+name: Translation Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Joomla! tag to test against'
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check available git constants
+        run: echo "inputs.tag - ${{ inputs.tag }}; github.head_ref - ${{ github.head_ref  }}; github.base_ref - ${{ github.base_ref  }}; github.ref_name - ${{ github.ref_name }}"
+
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+
+      - name: Composer Installation
+        uses: php-actions/composer@v5
+
+      - name: Translation integrity test
+        id: test
+        uses: php-actions/composer@v5
+        with:
+          command: "test:translation ${{ inputs.tag }}"

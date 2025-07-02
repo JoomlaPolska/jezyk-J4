@@ -83,7 +83,7 @@ final class Verify
             $tags = implode(', ', $tags);
 
             self::write(
-            "\n<red>Provide a tag name</red> as a parameter for this function eg ".
+                "\n<red>Provide a tag name</red> as a parameter for this function eg ".
                 "`composer test:translation 4.4.0` or create a file /tmp/.test-against containing a name".
                 "of the tag from https://github.com/joomla/joomla-cms repository that you want to test against.\n\n".
                 "Available tags:\n$tags\n");

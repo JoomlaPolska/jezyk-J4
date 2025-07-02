@@ -13,7 +13,6 @@ define('_JEXEC', true);
 
 final class Verify
 {
-
     protected static ?array $releases = null;
 
     protected Event $event;
@@ -84,7 +83,7 @@ final class Verify
             $tags = implode(', ', $tags);
 
             self::write(
-            "\n<red>Provide a tag name</red> as a parameter for this function eg ".
+                "\n<red>Provide a tag name</red> as a parameter for this function eg ".
                 "`composer test:translation 4.4.0` or create a file /tmp/.test-against containing a name".
                 "of the tag from https://github.com/joomla/joomla-cms repository that you want to test against.\n\n".
                 "Available tags:\n$tags\n");
@@ -131,7 +130,6 @@ final class Verify
             ["\033[31m","\033[32m","\033[33m","\033[34m","\033[35m","\033[36m","\033[90m","\033[97m","\033[1m"],
             $text);
         return str_ireplace(['</red>','</green>','</yellow>','</blue>','</magenta>','</cyan>','</gray>','</white>'],"\033[39m", $text);
-
     }
 
     /**
@@ -372,7 +370,6 @@ final class Verify
             self::write("Translation <red>test failed!</red>");
             self::write(str_repeat('=', 64));
             self::write('');
-
 
             exit(1);
         }

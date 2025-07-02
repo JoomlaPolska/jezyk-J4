@@ -14,9 +14,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check available git constants
-        run: echo "github.head_ref - ${{ github.head_ref  }}; github.base_ref - ${{ github.base_ref  }}; github.ref_name - ${{ github.ref_name }}"
-
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2

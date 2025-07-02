@@ -13,6 +13,7 @@ define('_JEXEC', true);
 
 final class Verify
 {
+
     protected static ?array $releases = null;
 
     protected Event $event;
@@ -92,7 +93,6 @@ final class Verify
         }
 
         if( array_key_exists(0, $arguments) && $arguments[0]!=='' ) {
-
             if( substr_count($arguments[0], '.')<2 && str_ends_with($arguments[0], '-dev') ) {
                 $version = substr($arguments[0], 0, stripos($arguments[0], '-'));
                 $this->testedReleaseTag = $this->getReleaseTag($version);
@@ -131,6 +131,7 @@ final class Verify
             ["\033[31m","\033[32m","\033[33m","\033[34m","\033[35m","\033[36m","\033[90m","\033[97m","\033[1m"],
             $text);
         return str_ireplace(['</red>','</green>','</yellow>','</blue>','</magenta>','</cyan>','</gray>','</white>'],"\033[39m", $text);
+
     }
 
     /**
@@ -372,6 +373,7 @@ final class Verify
             self::write(str_repeat('=', 64));
             self::write('');
 
+
             exit(1);
         }
 
@@ -379,7 +381,6 @@ final class Verify
 
         self::write(str_repeat('=', 64));
         self::write('');
-
     }
 
     /**

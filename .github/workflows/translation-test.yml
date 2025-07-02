@@ -1,7 +1,14 @@
 name: Translation Test
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - 5.*-dev
+      - 6.*-dev
+  push:
+    branches:
+      - 5.*-dev
+      - 6.*-dev
 
 jobs:
   test:

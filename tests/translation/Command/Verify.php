@@ -4,13 +4,10 @@ namespace TranslationTest\Command;
 
 use Composer\Script\Event;
 use En_GBLocalise;
-use Exception;
-use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
 use SplFileInfo;
 use TranslationTest\TestHelper;
-use FilesystemIterator;
 
 define('_JEXEC', true);
 
@@ -337,7 +334,7 @@ final class Verify
                 self::write("- Found <yellow>$this->changed_files_count</yellow> translation files changed");
             }
 
-            self::write("- Missing <yellow>$this->missing_count</yellow> translation phrases");
+            self::write("- <red>Missing $this->missing_count translation phrases</red>");
 
             if( $this->missing_files_count ) {
                 self::write("- Missing <yellow>$this->missing_files_count</yellow> translation files");

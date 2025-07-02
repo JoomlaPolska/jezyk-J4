@@ -11,13 +11,42 @@ on:
       - 6.*-dev
 
 jobs:
-  test:
+  test_pr:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
 
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+
+      - run: echo "github.ref_name ${{ github.ref_name }}; github.base_ref ${{ github.base_ref }}"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Composer Installation
+        uses: php-actions/composer@v6
+
+      - name: Translation integrity test
+        id: test
+        uses: php-actions/composer@v6
+        with:
+          command: "test:translation"
+          args: "${{ github.base_ref }} --ignore-obsolete"
+  test_push:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    steps:
+
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - run: echo "github.ref_name ${{ github.ref_name }}; github.base_ref ${{ github.base_ref }}"
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4

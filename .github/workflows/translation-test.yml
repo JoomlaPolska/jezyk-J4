@@ -1,20 +1,19 @@
 name: Translation Test
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Joomla! tag to test against'
-        required: true
-        type: string
+  pull_request:
+    branches:
+      - 5.*-dev
+      - 6.*-dev
+  push:
+    branches:
+      - 5.*-dev
+      - 6.*-dev
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check available git constants
-        run: echo "inputs.tag - ${{ inputs.tag }}; github.head_ref - ${{ github.head_ref  }}; github.base_ref - ${{ github.base_ref  }}; github.ref_name - ${{ github.ref_name }}"
-
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
@@ -26,4 +25,4 @@ jobs:
         id: test
         uses: php-actions/composer@v5
         with:
-          command: "test:translation ${{ inputs.tag }}"
+          command: "test:translation ${{ github.ref_name }} --ignore-obsolete"

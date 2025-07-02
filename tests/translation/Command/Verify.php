@@ -92,7 +92,6 @@ final class Verify
         }
 
         if( array_key_exists(0, $arguments) && $arguments[0]!=='' ) {
-
             if( substr_count($arguments[0], '.')<2 && str_ends_with($arguments[0], '-dev') ) {
                 $version = substr($arguments[0], 0, stripos($arguments[0], '-'));
                 $this->testedReleaseTag = $this->getReleaseTag($version);
@@ -379,7 +378,6 @@ final class Verify
 
         self::write(str_repeat('=', 64));
         self::write('');
-
     }
 
     /**

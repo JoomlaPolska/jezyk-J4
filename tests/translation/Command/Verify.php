@@ -13,6 +13,8 @@ define('_JEXEC', true);
 
 final class Verify
 {
+    protected static ?array $releases = null;
+
     protected Event $event;
 
     protected string $path_tmp = '';
@@ -90,7 +92,16 @@ final class Verify
         }
 
         if( array_key_exists(0, $arguments) && $arguments[0]!=='' ) {
-            $this->testedReleaseTag = $arguments[0];
+
+            if( substr_count($arguments[0], '.')<2 && str_ends_with($arguments[0], '-dev') ) {
+                $version = substr($arguments[0], 0, stripos($arguments[0], '-'));
+                $this->testedReleaseTag = $this->getReleaseTag($version);
+
+                self::write('Dev branch name provided. Using latest tag: '.$this->testedReleaseTag);
+            } else {
+                $this->testedReleaseTag = $arguments[0];
+            }
+
         } else {
             $this->testedReleaseTag = file_get_contents($this->path_tmp.'/.test-against');
 
@@ -116,10 +127,10 @@ final class Verify
     protected static function colorize(string $text): string
     {
         $text = str_ireplace(
-            ['<red>','<green>','<yellow>','<blue>','<magenta>','<cyan>','<gray>'],
-            ["\033[31m","\033[32m","\033[33m","\033[34m","\033[35m","\033[36m","\033[90m"],
+            ['<red>','<green>','<yellow>','<blue>','<magenta>','<cyan>','<gray>','<white>'],
+            ["\033[31m","\033[32m","\033[33m","\033[34m","\033[35m","\033[36m","\033[90m","\033[97m","\033[1m"],
             $text);
-        return str_ireplace(['</red>','</green>','</yellow>','</blue>','</magenta>','</cyan>','</gray>'],"\033[39m", $text);
+        return str_ireplace(['</red>','</green>','</yellow>','</blue>','</magenta>','</cyan>','</gray>','</white>'],"\033[39m", $text);
     }
 
     /**
@@ -260,7 +271,7 @@ final class Verify
         $obsolete_keys = array_diff_key($translated, $original);
         $missing_keys = array_diff_key($original, $translated);
 
-        if( $obsolete_keys!==[] || $missing_keys!==[] ) {
+        if( ($obsolete_keys!==[] || $missing_keys!==[]) && !$this->ignore_obsolete ) {
             self::write('');
             $translated_relative_path = substr($translated_path, strlen($this->path_root)+1);
             self::write("There are differences in <yellow>$translated_relative_path</yellow>");
@@ -325,33 +336,50 @@ final class Verify
             self::write("<yellow>$key</yellow> was moved to {$this->missing_phrases[$key]}");
         }
 
+        self::write(PHP_EOL.str_repeat('=', 64));
+        self::write("- Translation was tested against: <white>$this->testedReleaseTag</white>");
+        self::write("- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',').'</yellow>');
+
+        if( $this->changed_files_count ) {
+            self::write("- Found <yellow>$this->changed_files_count</yellow> translation files changed");
+        }
+
         if( $this->missing_count ) {
-
-            self::write(PHP_EOL. "Translation <red>test not passed!</red>: ");
-            self::write("- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',')).'</yellow>';
-
-            if( $this->changed_files_count ) {
-                self::write("- Found <yellow>$this->changed_files_count</yellow> translation files changed");
-            }
-
             self::write("- <red>Missing $this->missing_count translation phrases</red>");
+        }
 
-            if( $this->missing_files_count ) {
-                self::write("- Missing <yellow>$this->missing_files_count</yellow> translation files");
-            }
-            if( $this->obsolete_count && !$this->ignore_obsolete ) {
-                self::write("- Found <yellow>$this->obsolete_count</yellow> obsolete phrases");
-            }
-            if( $this->obsolete_files_count ) {
-                self::write("- Found <yellow>$this->obsolete_files_count</yellow> obsolete translation files");
-            }
+        if( $this->missing_files_count ) {
+            self::write("- <red>Missing $this->missing_files_count translation files</red>");
+        }
+
+        if( $this->obsolete_count && $this->ignore_obsolete ) {
+            self::write("- Found <yellow>$this->obsolete_count</yellow> obsolete phrases");
+        } elseif( $this->obsolete_count && !$this->ignore_obsolete ) {
+            self::write("- <red>Found $this->obsolete_count obsolete phrases</red>");
+        }
+
+        if( $this->obsolete_files_count && $this->ignore_obsolete ) {
+            self::write("- Found <yellow>$this->obsolete_files_count</yellow> obsolete translation files");
+        } elseif ( $this->obsolete_files_count && !$this->ignore_obsolete ) {
+            self::write("- <red>Found $this->obsolete_files_count obsolete translation files</red>");
+        }
+
+        self::write(str_repeat('=', 64));
+
+        if( $this->missing_count || $this->missing_files_count || (($this->obsolete_count || $this->obsolete_files_count) && !$this->ignore_obsolete) ) {
+
+            self::write("Translation <red>test failed!</red>");
+            self::write(str_repeat('=', 64));
+            self::write('');
 
             exit(1);
         }
 
-        self::write(PHP_EOL.
-            "Translation <green>testpassed.</green>: ".PHP_EOL.
-            "- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',')).'</yellow>';
+        self::write("Translation <green>test passed.</green>");
+
+        self::write(str_repeat('=', 64));
+        self::write('');
+
     }
 
     /**
@@ -359,10 +387,32 @@ final class Verify
      */
     private function getReleaseTags(): array
     {
-        $tags = (new TestHelper())->getURLContents('https://api.github.com/repos/joomla/joomla-cms/releases');
-        $tags = json_decode($tags, JSON_OBJECT_AS_ARRAY, 512, JSON_THROW_ON_ERROR);
+        if( is_null(self::$releases) ) {
+            $tags = (new TestHelper())->getURLContents('https://api.github.com/repos/joomla/joomla-cms/releases');
+            $tags = json_decode($tags, JSON_OBJECT_AS_ARRAY, 512, JSON_THROW_ON_ERROR);
+            self::$releases = array_column($tags, 'tag_name');
+        }
 
-        return array_column($tags, 'tag_name');
+        return self::$releases;
+    }
+
+    /**
+     * @param   string  $version Version including minor (eg. 5.6)
+     *
+     * @return string
+     * @throws JsonException
+     */
+    private function getReleaseTag(string $version): string
+    {
+        $tags = $this->getReleaseTags();
+
+        usort($tags, 'version_compare');
+
+        $tags = array_filter($tags, function($tag) use ($version) {
+            return str_starts_with($tag, $version) && !str_contains($tag, '-');
+        });
+
+        return end($tags);
     }
 
     private function getLanguageCode(): string

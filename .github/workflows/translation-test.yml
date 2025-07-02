@@ -13,7 +13,7 @@ jobs:
       - name: Composer Installation
         uses: php-actions/composer@v5
 
-      - name: PHP 7.2+ Compatibility
+      - name: Translation integrity test
         id: test
         uses: php-actions/composer@v5
         with:

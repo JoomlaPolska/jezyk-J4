@@ -19,7 +19,8 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - run: |
+      - name: Add git exceptions
+        run: |
           git config --global --add safe.directory /app
           git config --global --add safe.directory /app/tmp/joomla-cms
 

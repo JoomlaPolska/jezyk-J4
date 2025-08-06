@@ -16,7 +16,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - run: echo "github.ref_name ${{ github.ref_name }}; github.base_ref ${{ github.base_ref }}"
+      - name: Add git exceptions
+        run: |
+          git config --global --add safe.directory /app
+          git config --global --add safe.directory /app/tmp/joomla-cms
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4

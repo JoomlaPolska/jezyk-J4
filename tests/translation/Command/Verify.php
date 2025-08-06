@@ -228,7 +228,8 @@ final class Verify
         {
             $original = $this->findOriginalPath($translated);
             if( !file_exists($original) ) {
-                self::write("<red>The translation file $original doesn't exist in English translation files!</red>");
+                $originalRelative = str_replace(DIRECTORY_SEPARATOR, '/', substr($original, strlen($this->path_root)+1));
+                self::write("<red>The translation file $originalRelative doesn't exist in English translation files!</red>");
                 $this->obsolete_files_count++;
 
                 continue;
@@ -244,7 +245,8 @@ final class Verify
         {
             $translatedPath = $this->findTranslationPath($source_path);
             if( !file_exists($translatedPath) ) {
-                self::write("The translation file <red>$translatedPath</red> doesn't exist in your translation files!");
+                $translatedPathRelative = str_replace(DIRECTORY_SEPARATOR, '/', substr($translatedPath, strlen($this->path_root)+1));
+                self::write("The translation file <red>$translatedPathRelative</red> doesn't exist in your translation files!");
                 $this->missing_files_count++;
             }
         }
@@ -271,8 +273,7 @@ final class Verify
         $missing_keys = array_diff_key($original, $translated);
 
         if( ($obsolete_keys!==[] || $missing_keys!==[]) && !$this->ignore_obsolete ) {
-            self::write('');
-            $translated_relative_path = substr($translated_path, strlen($this->path_root)+1);
+            $translated_relative_path = str_replace(DIRECTORY_SEPARATOR, '/', substr($translated_path, strlen($this->path_root)+1));
             self::write("There are differences in <yellow>$translated_relative_path</yellow>");
             $this->changed_files_count++;
         }

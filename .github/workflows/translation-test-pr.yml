@@ -5,14 +5,11 @@ on:
     branches:
       - 5.*-dev
       - 6.*-dev
-  push:
-    branches:
-      - 5.*-dev
-      - 6.*-dev
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
 
       - name: Checkout
@@ -38,4 +35,4 @@ jobs:
         uses: php-actions/composer@v6
         with:
           command: "test:translation"
-          args: "${{ github.ref_name }} --ignore-obsolete"
+          args: "${{ github.base_ref }} --ignore-obsolete"

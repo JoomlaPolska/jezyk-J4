@@ -32,7 +32,7 @@ final class Verify
     protected int $obsolete_count = 0;
     protected int $missing_files_count = 0;
     protected int $obsolete_files_count = 0;
-    protected int $changed_files_count = 0;
+    protected static int $changed_files_count = 0;
 
     protected array $obsolete_phrases = [];
     protected array $missing_phrases = [];
@@ -43,6 +43,8 @@ final class Verify
     protected ?array $plural_suffixes = null;
 
     protected ?string $language_code = null;
+
+    protected static array $changes = [];
 
     /**
      * @throws JsonException
@@ -118,17 +120,27 @@ final class Verify
      *
      * @param   string  $text  Text.
      */
-    public static function write(string $text): void
+    public static function write(string $text, ?string $file = null): void
     {
-        echo self::colorize($text) ."\033[39m". PHP_EOL;
+        if( !is_null($file) ) {
+            if ( !array_key_exists($file, self::$changes) ) {
+                self::$changes = array_merge(self::$changes, [$file=>[]]);
+            } else {
+                self::$changes[$file][] = self::colorize($text) ."\033[39m". PHP_EOL;
+            }
+        } else {
+            echo self::colorize($text) ."\033[39m". PHP_EOL;
+        }
     }
 
     protected static function colorize(string $text): string
     {
         $text = str_ireplace(
-            ['<red>','<green>','<yellow>','<blue>','<magenta>','<cyan>','<gray>','<white>'],
-            ["\033[31m","\033[32m","\033[33m","\033[34m","\033[35m","\033[36m","\033[90m","\033[97m","\033[1m"],
-            $text);
+            ['<red>',       '<green>',  '<yellow>', '<blue>',   '<magenta>',    '<cyan>',   '<gray>',   '<white>',  '<br>'],
+            ["\033[31m",    "\033[32m", "\033[33m", "\033[34m", "\033[35m",     "\033[36m", "\033[90m", "\033[97m", PHP_EOL],
+            $text
+        );
+
         return str_ireplace(['</red>','</green>','</yellow>','</blue>','</magenta>','</cyan>','</gray>','</white>'],"\033[39m", $text);
     }
 
@@ -229,7 +241,7 @@ final class Verify
             $original = $this->findOriginalPath($translated);
             if( !file_exists($original) ) {
                 $originalRelative = str_replace(DIRECTORY_SEPARATOR, '/', substr($original, strlen($this->path_root)+1));
-                self::write("<red>The translation file $originalRelative doesn't exist in English translation files!</red>");
+                self::write("<red>The translation file $originalRelative doesn't exist in English translation files!</red>", $originalRelative);
                 $this->obsolete_files_count++;
 
                 continue;
@@ -246,7 +258,7 @@ final class Verify
             $translatedPath = $this->findTranslationPath($source_path);
             if( !file_exists($translatedPath) ) {
                 $translatedPathRelative = str_replace(DIRECTORY_SEPARATOR, '/', substr($translatedPath, strlen($this->path_root)+1));
-                self::write("The translation file <red>$translatedPathRelative</red> doesn't exist in your translation files!");
+                self::write("The translation file <red>$translatedPathRelative</red> doesn't exist in your translation files!", $translatedPathRelative);
                 $this->missing_files_count++;
             }
         }
@@ -274,41 +286,43 @@ final class Verify
 
         if( ($obsolete_keys!==[] || $missing_keys!==[]) && !$this->ignore_obsolete ) {
             $translated_relative_path = str_replace(DIRECTORY_SEPARATOR, '/', substr($translated_path, strlen($this->path_root)+1));
-            self::write("There are differences in <yellow>$translated_relative_path</yellow>");
-            $this->changed_files_count++;
+//            self::write("There are differences in <yellow>$translated_relative_path</yellow>", $translated_relative_path);
+//            $this->changed_files_count++;
+
+            foreach( $obsolete_keys as $key=>$value ) {
+
+                if( $this->translationConstantIsPlural($key) ) {
+                    continue;
+                }
+
+                if( !$this->ignore_obsolete ) {
+                    self::write("<gray>- $key</gray> was removed", $translated_relative_path);
+                }
+
+                $this->obsolete_count++;
+                $this->obsolete_phrases[$key] = $translated_path;
+            }
+
+
+            foreach( $missing_keys as $key=>$value ) {
+
+                // This is a plural constant so ignore it
+                if( $this->sourceConstantIsPlural($key) ) {
+                    continue;
+                }
+
+                // This constant has plural translation so ignore it
+                if( $this->pluralTranslationExists($key) ) {
+                    continue;
+                }
+
+                self::write("<red>! $key=\"".$missing_keys[$key]."\"</red> is missing in translation", $translated_relative_path);
+
+                $this->missing_count++;
+                $this->missing_phrases[$key] = $translated_path;
+            }
         }
 
-        foreach( $obsolete_keys as $key=>$value ) {
-
-            if( $this->translationConstantIsPlural($key) ) {
-                continue;
-            }
-
-            if( !$this->ignore_obsolete ) {
-                self::write("<gray>- $key</gray> was removed");
-            }
-
-            $this->obsolete_count++;
-            $this->obsolete_phrases[$key] = $translated_path;
-        }
-
-
-        foreach( $missing_keys as $key=>$value ) {
-
-            // This is a plural constant so ignore it
-            if( $this->sourceConstantIsPlural($key) ) {
-                continue;
-            }
-
-            // This constant has plural translation so ignore it
-            if( $this->pluralTranslationExists($key) ) {
-                continue;
-            }
-
-            self::write("<red>! $key=\"{$missing_keys[$key]}\"</red> is missing in translation");
-            $this->missing_count++;
-            $this->missing_phrases[$key] = $translated_path;
-        }
     }
 
     protected function compareTranslations(): void
@@ -336,12 +350,14 @@ final class Verify
             self::write("<yellow>$key</yellow> was moved to {$this->missing_phrases[$key]}");
         }
 
+        self::flush();
+
         self::write(PHP_EOL.str_repeat('=', 64));
         self::write("- Translation was tested against: <white>$this->testedReleaseTag</white>");
         self::write("- Total phrases found: <yellow>".number_format($this->total_phrases_count,0, '', ',').'</yellow>');
 
-        if( $this->changed_files_count ) {
-            self::write("- Found <yellow>$this->changed_files_count</yellow> translation files changed");
+        if( self::$changed_files_count ) {
+            self::write("- Found <yellow>".self::$changed_files_count."</yellow> translation files changed");
         }
 
         if( $this->missing_count ) {
@@ -497,6 +513,26 @@ final class Verify
         }
 
         return $this->plural_source_prefixes;
+    }
+
+    /**
+     * Flush all the changes details into the console.
+     *
+     * Note: Required to get ir of empty file entries in the test log.
+     *
+     * @return void
+     */
+    protected static function flush(): void
+    {
+        foreach( self::$changes as $file=>$results ) {
+            if( $results!==[] ) {
+                self::$changed_files_count++;
+                echo self::colorize("<br>There are differences in <yellow>$file</yellow><br>");
+                foreach( $results as $result ) {
+                    echo $result;
+                }
+            }
+        }
     }
 
 }

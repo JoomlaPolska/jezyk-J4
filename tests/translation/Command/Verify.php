@@ -301,9 +301,7 @@ final class Verify
                     continue;
                 }
 
-                if( !$this->ignore_obsolete ) {
-                    self::write("<gray>- $key</gray> was removed", $translated_relative_path);
-                }
+                self::write("<gray>- $key</gray> was removed", $translated_relative_path);
 
                 $this->obsolete_count++;
                 $this->obsolete_phrases[$key] = $translated_path;
@@ -340,7 +338,7 @@ final class Verify
                     continue;
                 }
 
-                self::write("<yellow>$key = \"". $value ."\"</yellow> is the same as in English", $translated_relative_path);
+                self::write("<cyan>$key = \"". $value ."\"</cyan> is the same as in English", $translated_relative_path);
             }
         }
 

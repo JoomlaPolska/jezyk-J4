@@ -38,6 +38,7 @@ final class Verify
     protected array $missing_phrases = [];
 
     protected bool $ignore_obsolete = false;
+    protected bool $find_untranslated = false;
 
     protected ?array $plural_source_prefixes = null;
     protected ?array $plural_suffixes = null;
@@ -68,15 +69,20 @@ final class Verify
 
         if( array_intersect(['--help','--usage'], $arguments)!==[] ) {
             echo PHP_EOL;
-            echo "Use: `composer test:translation TAG` (where where TAG is a tag name from https://github.com/joomla/joomla-cms repository)".PHP_EOL;
+            echo "Use: `composer test:translation TAG` (where TAG is a tag name from https://github.com/joomla/joomla-cms repository)".PHP_EOL;
             echo "Arguments: ".PHP_EOL;
             echo "\t--ignore-obsolete - Ignore obsolete strings".PHP_EOL;
+            echo "\t--find-untranslated - Find phrases that have the same value in both languages (are not translated)".PHP_EOL;
             echo "\t--help|--usage - Shows this screen".PHP_EOL;
             die;
         }
 
-        if(array_intersect(['--ignore-obsolete'], $arguments)!==[]) {
+        if(in_array('--ignore-obsolete', $arguments, true)) {
             $this->ignore_obsolete = true;
+        }
+
+        if(in_array('--find-untranslated', $arguments, true)) {
+            $this->find_untranslated = true;
         }
 
         if( !array_key_exists(0, $arguments) && !file_exists($this->path_root.'/.test-against') ) {
@@ -283,27 +289,25 @@ final class Verify
 
         $obsolete_keys = array_diff_key($translated, $original);
         $missing_keys = array_diff_key($original, $translated);
+        $untranslated_keys = array_intersect_assoc($translated, $original);
 
         if( ($obsolete_keys!==[] || $missing_keys!==[]) && !$this->ignore_obsolete ) {
             $translated_relative_path = str_replace(DIRECTORY_SEPARATOR, '/', substr($translated_path, strlen($this->path_root)+1));
-//            self::write("There are differences in <yellow>$translated_relative_path</yellow>", $translated_relative_path);
-//            $this->changed_files_count++;
 
+            // Find phrases that should be removed
             foreach( $obsolete_keys as $key=>$value ) {
 
                 if( $this->translationConstantIsPlural($key) ) {
                     continue;
                 }
 
-                if( !$this->ignore_obsolete ) {
-                    self::write("<gray>- $key</gray> was removed", $translated_relative_path);
-                }
+                self::write("<gray>- $key</gray> was removed", $translated_relative_path);
 
                 $this->obsolete_count++;
                 $this->obsolete_phrases[$key] = $translated_path;
             }
 
-
+            // Find phrases that should be added to translation
             foreach( $missing_keys as $key=>$value ) {
 
                 // This is a plural constant so ignore it
@@ -316,10 +320,25 @@ final class Verify
                     continue;
                 }
 
-                self::write("<red>! $key=\"".$missing_keys[$key]."\"</red> is missing in translation", $translated_relative_path);
+                self::write("<red>! $key=\"". $value ."\"</red> is missing in translation", $translated_relative_path);
 
                 $this->missing_count++;
                 $this->missing_phrases[$key] = $translated_path;
+            }
+        }
+
+        if( $untranslated_keys!==[] && $this->find_untranslated ) {
+            $translated_relative_path = str_replace(DIRECTORY_SEPARATOR, '/', substr($translated_path, strlen($this->path_root)+1));
+
+            // Find phrases that are present in both languages but are exactly the same
+            foreach( $untranslated_keys as $key=>$value ) {
+
+                // Numbers are not translated
+                if( is_numeric($value) ) {
+                    continue;
+                }
+
+                self::write("<cyan>$key = \"". $value ."\"</cyan> is the same as in English", $translated_relative_path);
             }
         }
 

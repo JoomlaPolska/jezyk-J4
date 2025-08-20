@@ -8,7 +8,9 @@
 ### Proces testowania
 - Przejdź w terminalu do katalogu repozytorium
 - Zainstaluj wymagane paczki `composer install`
-- Uruchom procedurę testowania `composer test:translation`
+- Uruchom procedurę testowania `composer test:translation 5.3.3` (testowanie z Joomla! 5.3.3)
+  - Testowanie tłumaczenia z uwzględnieniem fraz, które mają tę samą wartość w EN i PL `composer test:translation -- 5.3.3 --find-untranslated`
+  - Testowanie tłumaczenia z ignorowaniem fraz, które zostały usunięte w oryginalnym pliku `composer test:translation -- 5.3.3 --ignore-obsolete`
 
 ## Proces testowania instalacji
 ### Wymagania

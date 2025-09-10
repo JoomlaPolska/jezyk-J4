@@ -16,5 +16,6 @@ Przeczytaj [Wskazówki do współpracy](.github/CONTRIBUTING.md) i zacznij od pi
 ## Licencja
 GNU GENERAL PUBLIC LICENSE V2. Przeczytaj [License File](LICENSE), aby uzyskać więcej informacji.
 
-## Przygotowanie paczek i testowania
+## Dokumentacja
+- [Budowanie paczki instalacyjnej](.docs/build.md)
 - [Testowanie](.docs/testing.md)

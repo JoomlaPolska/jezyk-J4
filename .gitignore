@@ -17,3 +17,9 @@ Desktop.ini
 
 # Build files
 build/tmp/
+
+/vendor/
+build.properties
+.build
+/tmp
+/tmp/*

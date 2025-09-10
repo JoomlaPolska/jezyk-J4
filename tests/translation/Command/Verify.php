@@ -99,23 +99,33 @@ final class Verify
             exit(500);
         }
 
-        if( array_key_exists(0, $arguments) && $arguments[0]!=='' ) {
+        if( array_key_exists(0, $arguments) && $arguments[0]!=='' && $arguments[0]!=='-' ) {
             if( substr_count($arguments[0], '.')<2 && str_ends_with($arguments[0], '-dev') ) {
-                $version = substr($arguments[0], 0, stripos($arguments[0], '-'));
+                $version = substr($arguments[0], 0, strpos($arguments[0], '-'));
                 $this->testedReleaseTag = $this->getReleaseTag($version);
-
-                self::write('Dev branch name provided. Using latest tag: '.$this->testedReleaseTag);
             } else {
                 $this->testedReleaseTag = $arguments[0];
             }
 
         } else {
             $this->testedReleaseTag = file_get_contents($this->path_tmp.'/.test-against');
-
-            if( $this->testedReleaseTag === '' ) {
-                throw new RuntimeException("Provide a tag name from https://github.com/joomla/joomla-cms repository in /tmp/.test-against");
-            }
         }
+
+        if( $this->testedReleaseTag === '' || $this->testedReleaseTag[0] ==='-' ) {
+
+            $tags = $this->getReleaseTags();
+            $tags = implode(', ', $tags);
+
+            self::write(
+                "\n<red>Provide a tag name</red> as a parameter for this function eg ".
+                "`composer test:translation 4.4.0` or create a file /tmp/.test-against containing a name".
+                "of the tag from https://github.com/joomla/joomla-cms repository that you want to test against.\n\n".
+                "Available tags:\n$tags\n");
+
+            exit(500);
+        }
+
+        self::write('Dev branch name provided. Using latest tag: '.$this->testedReleaseTag);
 
         $this->downloadRelease();
         $this->compareTranslations();
@@ -442,7 +452,7 @@ final class Verify
 
         usort($tags, 'version_compare');
 
-        $tags = array_filter($tags, function($tag) use ($version) {
+        $tags = array_filter($tags, static function($tag) use ($version) {
             return str_starts_with($tag, $version) && !str_contains($tag, '-');
         });
 

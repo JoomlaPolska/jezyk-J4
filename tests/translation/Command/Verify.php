@@ -112,9 +112,20 @@ final class Verify
         } else {
             $this->testedReleaseTag = file_get_contents($this->path_tmp.'/.test-against');
 
-            if( $this->testedReleaseTag === '' ) {
-                throw new RuntimeException("Provide a tag name from https://github.com/joomla/joomla-cms repository in /tmp/.test-against");
-            }
+        }
+
+        if( $this->testedReleaseTag === '' || $this->testedReleaseTag[0] ==='-' ) {
+
+            $tags = $this->getReleaseTags();
+            $tags = implode(', ', $tags);
+
+            self::write(
+                "\n<red>Provide a tag name</red> as a parameter for this function eg ".
+                "`composer test:translation 4.4.0` or create a file /tmp/.test-against containing a name".
+                "of the tag from https://github.com/joomla/joomla-cms repository that you want to test against.\n\n".
+                "Available tags:\n$tags\n");
+
+            exit(500);
         }
 
         $this->downloadRelease();
@@ -442,7 +453,7 @@ final class Verify
 
         usort($tags, 'version_compare');
 
-        $tags = array_filter($tags, function($tag) use ($version) {
+        $tags = array_filter($tags, static function($tag) use ($version) {
             return str_starts_with($tag, $version) && !str_contains($tag, '-');
         });
 

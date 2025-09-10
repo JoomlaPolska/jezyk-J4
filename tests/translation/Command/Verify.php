@@ -111,7 +111,6 @@ final class Verify
 
         } else {
             $this->testedReleaseTag = file_get_contents($this->path_tmp.'/.test-against');
-
         }
 
         if( $this->testedReleaseTag === '' || $this->testedReleaseTag[0] ==='-' ) {

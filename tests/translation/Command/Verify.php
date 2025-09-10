@@ -99,12 +99,10 @@ final class Verify
             exit(500);
         }
 
-        if( array_key_exists(0, $arguments) && $arguments[0]!=='' ) {
+        if( array_key_exists(0, $arguments) && $arguments[0]!=='' && $arguments[0]!=='-' ) {
             if( substr_count($arguments[0], '.')<2 && str_ends_with($arguments[0], '-dev') ) {
-                $version = substr($arguments[0], 0, stripos($arguments[0], '-'));
+                $version = substr($arguments[0], 0, strpos($arguments[0], '-'));
                 $this->testedReleaseTag = $this->getReleaseTag($version);
-
-                self::write('Dev branch name provided. Using latest tag: '.$this->testedReleaseTag);
             } else {
                 $this->testedReleaseTag = $arguments[0];
             }
@@ -126,6 +124,8 @@ final class Verify
 
             exit(500);
         }
+
+        self::write('Dev branch name provided. Using latest tag: '.$this->testedReleaseTag);
 
         $this->downloadRelease();
         $this->compareTranslations();

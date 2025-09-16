@@ -141,9 +141,9 @@ final class Verify
         if( !is_null($file) ) {
             if ( !array_key_exists($file, self::$changes) ) {
                 self::$changes = array_merge(self::$changes, [$file=>[]]);
-            } else {
-                self::$changes[$file][] = self::colorize($text) ."\033[39m". PHP_EOL;
             }
+
+            self::$changes[$file][] = self::colorize($text) ."\033[39m". PHP_EOL;
         } else {
             echo self::colorize($text) ."\033[39m". PHP_EOL;
         }

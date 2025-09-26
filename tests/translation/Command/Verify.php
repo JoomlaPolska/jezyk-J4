@@ -397,15 +397,11 @@ final class Verify
             self::write("- <red>Missing $this->missing_files_count translation files</red>");
         }
 
-        if( $this->obsolete_count && $this->ignore_obsolete ) {
-            self::write("- Found <yellow>$this->obsolete_count</yellow> obsolete phrases");
-        } elseif( $this->obsolete_count && !$this->ignore_obsolete ) {
+        if( $this->obsolete_count && !$this->ignore_obsolete ) {
             self::write("- <red>Found $this->obsolete_count obsolete phrases</red>");
         }
 
-        if( $this->obsolete_files_count && $this->ignore_obsolete ) {
-            self::write("- Found <yellow>$this->obsolete_files_count</yellow> obsolete translation files");
-        } elseif ( $this->obsolete_files_count && !$this->ignore_obsolete ) {
+        if ( $this->obsolete_files_count && !$this->ignore_obsolete ) {
             self::write("- <red>Found $this->obsolete_files_count obsolete translation files</red>");
         }
 

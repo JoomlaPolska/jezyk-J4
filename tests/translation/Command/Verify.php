@@ -444,12 +444,13 @@ final class Verify
      */
     private function getReleaseTag(string $version): string
     {
+
         $tags = $this->getReleaseTags();
 
         usort($tags, 'version_compare');
 
         $tags = array_filter($tags, static function($tag) use ($version) {
-            return str_starts_with($tag, $version) && !str_contains($tag, '-');
+            return str_starts_with($tag, $version);
         });
 
         return end($tags);

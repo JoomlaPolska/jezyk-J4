@@ -29,6 +29,6 @@ jobs:
       - name: Check PHP compatibility with PHP 8.3+
         uses: pantheon-systems/phpcompatibility-action@v1
         with:
-          test-versions: 8.3-
+          test-versions: 7.3-
           paths: ${{ github.workspace }}/administrator/language/pl-PL ${{ github.workspace }}/language/pl-PL ${{ github.workspace }}/tests ${{ github.workspace }}/script.php
           extensions: 'php'

@@ -1,4 +1,4 @@
-name: Check PHP Code
+name: PHP Compatibility
 
 on:
   pull_request:
@@ -18,17 +18,25 @@ env:
 jobs:
   php-compatibility:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.4']
     permissions: read-all
 
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Check PHP compatibility with PHP 8.3+
-        uses: pantheon-systems/phpcompatibility-action@v1
+      - name: Check compatibility with PHP 8.3
+        if: matrix.php == '8.3'
+        uses: StephaneBour/actions-php-lint@8.3
         with:
-          test-versions: 7.3-
-          paths: ${{ github.workspace }}/administrator/language/pl-PL ${{ github.workspace }}/language/pl-PL ${{ github.workspace }}/tests ${{ github.workspace }}/script.php
-          extensions: 'php'
+          dir: '.'
+
+      - name: Check compatibility with PHP 8.4
+        if: matrix.php == '8.4'
+        uses: StephaneBour/actions-php-lint@8.4
+        with:
+          dir: '.'

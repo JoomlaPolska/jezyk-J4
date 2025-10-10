@@ -3,7 +3,6 @@ name: Translation Test
 on:
   pull_request:
     branches:
-      - 5.*-dev
       - 6.*-dev
 
 jobs:

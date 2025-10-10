@@ -19,9 +19,9 @@ jobs:
         id: branch
         run: |
           VERSION="${{ env.VERSION }}"
-          BASE_BRANCH="$(echo "$VERSION" | awk -F. '{print $1"."$2"-dev"}')"
-          JOOMLA_VERSION="$(echo "$VERSION" | awk -F. '{print $1"."$2"."$3}')"
-          TRANSLATION_REVISION="$(echo "$VERSION" | awk -F. '{print $4}')"
+          BASE_BRANCH="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"-dev"}')"
+          JOOMLA_VERSION="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"."$3}')"
+          TRANSLATION_REVISION="$(echo -n "$VERSION" | awk -F. '{print $4}')"
           RELEASE_NAME="${JOOMLA_VERSION}v${TRANSLATION_REVISION} Język polski dla Joomla ${JOOMLA_VERSION}"
           echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
           echo "JOOMLA_VERSION=$JOOMLA_VERSION" >> $GITHUB_ENV

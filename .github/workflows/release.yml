@@ -29,7 +29,7 @@ jobs:
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
       - name: Checkout translation repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ env.BASE_BRANCH }}
@@ -51,7 +51,7 @@ jobs:
         run: composer build
 
       - name: Checkout JoomlaPolska/core-translations fork
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: JoomlaPolska/core-translations
           path: core-translations

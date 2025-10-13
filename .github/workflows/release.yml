@@ -93,6 +93,7 @@ jobs:
         with:
           tag_name: v${{ env.VERSION }}
           name: ${{ env.RELEASE_NAME }}
+          draft: true
           generate_release_notes: true
           files: |
             .build/pl-PL_joomla_lang_full_v*.zip

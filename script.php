@@ -26,8 +26,8 @@ class Pkg_plPLInstallerScript extends InstallerScript
 	public function __construct()
 	{
 		// Define the minumum versions to be supported.
-		$this->minimumJoomla = '4.0';
-		$this->minimumPhp    = '7.2.5';
+		$this->minimumJoomla = '6.0';
+		$this->minimumPhp    = '8.3';
 
 		$this->deleteFiles = [
 			// Backend
@@ -215,7 +215,6 @@ class Pkg_plPLInstallerScript extends InstallerScript
 			'/administrator/language/pl-PL/pl-PL.plg_fields_list.sys.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_media.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_media.sys.ini',
-			
 			'/administrator/language/pl-PL/pl-PL.plg_fields_radio.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_radio.sys.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_repeatable.ini',
@@ -332,7 +331,15 @@ class Pkg_plPLInstallerScript extends InstallerScript
 			'/administrator/language/pl-PL/plg_fields_subfields.sys.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_menuitem.ini',
 			'/administrator/language/pl-PL/pl-PL.plg_fields_menuitem.sys.ini',
-			
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_2.ini',
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_2_steps.ini',
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_3.ini',
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_3_steps.ini',
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_4.ini',
+			'/administrator/language/pl-PL/guidedtours.joomla_whatsnew_5_4_steps.ini',
+			'/administrator/language/pl-PL/plg_behaviour_compat.ini',
+			'/administrator/language/pl-PL/plg_behaviour_compat.sys.ini',
+
 			// Frontend
 			'/language/pl-PL/pl-PL.com_ajax.ini',
 			'/language/pl-PL/pl-PL.com_config.ini',

@@ -7,6 +7,9 @@ on:
         required: true
         type: string
 
+permissions:
+    contents: write
+
 env:
   VERSION: ${{ github.event.inputs.version }}
 
@@ -23,10 +26,10 @@ jobs:
           JOOMLA_VERSION="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"."$3}')"
           TRANSLATION_REVISION="$(echo -n "$VERSION" | awk -F. '{print $4}')"
           RELEASE_NAME="${JOOMLA_VERSION}v${TRANSLATION_REVISION} Język polski dla Joomla ${JOOMLA_VERSION}"
-          echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-          echo "JOOMLA_VERSION=$JOOMLA_VERSION" >> $GITHUB_ENV
-          echo "TRANSLATION_REVISION=$TRANSLATION_REVISION" >> $GITHUB_ENV
-          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+          echo -n "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+          echo -n "JOOMLA_VERSION=$JOOMLA_VERSION" >> $GITHUB_ENV
+          echo -n "TRANSLATION_REVISION=$TRANSLATION_REVISION" >> $GITHUB_ENV
+          echo -n "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
       - name: Checkout translation repo
         uses: actions/checkout@v5
@@ -45,7 +48,7 @@ jobs:
       - name: Update build.version in build.properties
         run: |
           cp build.properties.dist build.properties
-          sed -i "s/^build.version = .*$/build.version = ${{ env.VERSION }}/" build.properties
+          sed -i "s/^build.version=.*/build.version=${VERSION}/" build.properties
 
       - name: Clean and build translation package
         run: composer build

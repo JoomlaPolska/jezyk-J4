@@ -1,0 +1,105 @@
+name: Build Joomla Translation and Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Full translation version (e.g. 5.4.0.1)"
+        required: true
+        type: string
+
+permissions:
+    contents: write
+
+env:
+  VERSION: ${{ github.event.inputs.version }}
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Derive base branch from version
+        id: branch
+        run: |
+          VERSION="${{ env.VERSION }}"
+          BASE_BRANCH="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"-dev"}')"
+          JOOMLA_VERSION="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"."$3}')"
+          TRANSLATION_REVISION="$(echo -n "$VERSION" | awk -F. '{print $4}')"
+          RELEASE_NAME="${JOOMLA_VERSION}v${TRANSLATION_REVISION} Język polski dla Joomla ${JOOMLA_VERSION}"
+          echo -n "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+          echo -n "JOOMLA_VERSION=$JOOMLA_VERSION" >> $GITHUB_ENV
+          echo -n "TRANSLATION_REVISION=$TRANSLATION_REVISION" >> $GITHUB_ENV
+          echo -n "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+
+      - name: Checkout translation repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ env.BASE_BRANCH }}
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: phing, composer
+          coverage: none
+
+      - name: Update build.version in build.properties
+        run: |
+          cp build.properties.dist build.properties
+          sed -i "s/^build.version=.*/build.version=${VERSION}/" build.properties
+
+      - name: Clean and build translation package
+        run: composer build
+
+      - name: Checkout JoomlaPolska/core-translations fork
+        uses: actions/checkout@v5
+        with:
+          repository: JoomlaPolska/core-translations
+          path: core-translations
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Force-sync fork main branch
+        working-directory: core-translations
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote add upstream https://github.com/joomla/core-translations.git || true
+          git fetch upstream --tags
+          git checkout main
+          git reset --hard upstream/main
+          git push origin main --force
+
+      - name: Create version branch
+        working-directory: core-translations
+        run: |
+          git fetch origin
+          git checkout -B auto/update-translations-${{ env.VERSION }}
+
+      - name: Copy built files
+        run: |
+          rsync -a --delete .build/core-translations/ core-translations/
+
+      - name: Commit and push translations
+        working-directory: core-translations
+        run: |
+          git config user.name "joomlapl-bot"
+          git config user.email "41898282+joomlapl-bot@users.noreply.github.com"
+          git add .
+          git commit -m "Update Polish core translations for version ${{ env.VERSION }}" || echo "No changes to commit"
+          git push origin auto/update-translations-${{ env.VERSION }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: ${{ env.RELEASE_NAME }}
+          draft: true
+          generate_release_notes: true
+          files: |
+            .build/pl-PL_joomla_lang_full_v*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

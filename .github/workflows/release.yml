@@ -6,29 +6,29 @@ on:
       version:
         description: "Translation version (e.g., 5.4.0.1)"
         required: true
-
-permissions: {}
-# Permissions are restricted per job
+        type: string
 
 jobs:
   build:
-    name: Build translation and sync fork
     runs-on: ubuntu-latest
     permissions:
-      contents: write    # Required for checkout + artifact upload
+      contents: read
     outputs:
+      BASE_BRANCH: ${{ steps.meta.outputs.BASE_BRANCH }}
       JOOMLA_VERSION: ${{ steps.meta.outputs.JOOMLA_VERSION }}
       TRANSLATION_REVISION: ${{ steps.meta.outputs.TRANSLATION_REVISION }}
-      BASE_BRANCH: ${{ steps.meta.outputs.BASE_BRANCH }}
       RELEASE_NAME: ${{ steps.meta.outputs.RELEASE_NAME }}
+      ZIP_FILE: ${{ steps.package.outputs.ZIP_FILE }}
+      SYNC_VERSION: ${{ steps.meta.outputs.SYNC_VERSION }}
 
     steps:
-      - name: Checkout base repo
+      - name: Checkout main repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Derive base branch and metadata
+      - name: Derive base branch from version
         id: meta
         run: |
           VERSION="${{ github.event.inputs.version }}"
@@ -36,102 +36,141 @@ jobs:
           JOOMLA_VERSION="$(echo -n "$VERSION" | awk -F. '{print $1"."$2"."$3}')"
           TRANSLATION_REVISION="$(echo -n "$VERSION" | awk -F. '{print $4}')"
           RELEASE_NAME="${JOOMLA_VERSION}v${TRANSLATION_REVISION} Język polski dla Joomla ${JOOMLA_VERSION}"
-
+          SYNC_VERSION=$(echo -n "$VERSION" | awk -F. '{print $1}')
           echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_OUTPUT
           echo "JOOMLA_VERSION=$JOOMLA_VERSION" >> $GITHUB_OUTPUT
           echo "TRANSLATION_REVISION=$TRANSLATION_REVISION" >> $GITHUB_OUTPUT
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_OUTPUT
+          echo "SYNC_VERSION=$SYNC_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Checkout correct base branch
+      - name: Checkout base branch in main repo
         uses: actions/checkout@v5
         with:
           ref: ${{ steps.meta.outputs.BASE_BRANCH }}
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Setup PHP
+      - name: Setup PHP 8.3 with Composer and Phing
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
           tools: composer, phing
           coverage: none
 
-      - name: Install dependencies
-        run: composer install
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
 
-      - name: Prepare build.properties
+      - name: Update build.version in build.properties
         run: |
           cp build.properties.dist build.properties
           sed -i "s/^build.version=.*/build.version=${{ github.event.inputs.version }}/" build.properties
 
-      - name: Clean and build translation package
-        run: composer build
+      - name: Build Polish translations
+        run: phing -f build.xml build:lang_polish
 
-      - name: Checkout forked core-translations
-        uses: actions/checkout@v4
+      - name: Build core-translations from Crowdin
+        run: phing -f build.xml build:crowdin
+
+      - name: Find translation ZIP file
+        id: package
+        run: |
+          ZIP_FILE=$(find ./.build -maxdepth 1 -type f -name "*.zip" | head -n1)
+          echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_OUTPUT
+
+      - name: Upload translation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: translation-package
+          path: ${{ steps.package.outputs.ZIP_FILE }}
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Upload core-translations build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-translations
+          path: ./.build/core-translations
+          if-no-files-found: error
+          compression-level: 0
+
+  sync-translations:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout fork core-translations
+        uses: actions/checkout@v5
         with:
           repository: JoomlaPolska/core-translations
           token: ${{ secrets.CORE_TRANSLATIONS_PAT }}
           path: core-translations
           fetch-depth: 0
 
-      - name: Add upstream remote and fetch
-        working-directory: core-translations
-        run: |
-          git remote add upstream https://github.com/joomla/core-translations.git
-          git fetch upstream
-
-      - name: Authenticate PAT securely for Git operations
+      - name: Authenticate with GitHub CLI
         env:
           GH_TOKEN: ${{ secrets.CORE_TRANSLATIONS_PAT }}
-        run: gh auth setup-git
+        run: gh auth status || echo "${GH_TOKEN}" | gh auth login --with-token
 
-      - name: Force sync fork with upstream
+      - name: Synchronize fork main branch with upstream
+        working-directory: core-translations
+        env:
+          GH_TOKEN: ${{ secrets.CORE_TRANSLATIONS_PAT }}
+        run: gh repo sync JoomlaPolska/core-translations --source joomla/core-translations --force
+
+      - name: Download built core-translations artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: core-translations
+          path: ./build/core-translations
+
+      - name: Copy generated translation files to fork
         working-directory: core-translations
         run: |
-          git checkout main
-          git reset --hard upstream/main
-          git push origin main --force
+          SYNC_VERSION="${{ needs.build.outputs.SYNC_VERSION }}"
+          echo "Copying translations for Joomla major version: ${SYNC_VERSION}"
 
-      - name: Create new branch for translation version
+          mkdir -p joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL
+          mkdir -p joomla_v${SYNC_VERSION}/translations/package/pl-PL
+
+          # Copy installer translations (core)
+          if [ -d "../build/core-translations/joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL" ]; then
+            cp -r ../build/core-translations/joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/* \
+              joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/ || true
+          fi
+
+          # Copy package translations
+          if [ -d "../build/core-translations/joomla_v${SYNC_VERSION}/translations/package/pl-PL" ]; then
+            cp -r ../build/core-translations/joomla_v${SYNC_VERSION}/translations/package/pl-PL/* \
+              joomla_v${SYNC_VERSION}/translations/package/pl-PL/ || true
+          fi
+
+      - name: Create auto branch for version
+        working-directory: core-translations
+        run: git checkout -b auto/update-translations-${{ github.event.inputs.version }}
+
+      - name: Commit and push updated translations
         working-directory: core-translations
         run: |
-          git checkout -b auto/update-translations-${{ github.event.inputs.version }}
-
-      - name: Copy build output to fork
-        run: |
-          rsync -av --delete ./.build/core-translations/ ./core-translations/
-
-      - name: Commit and push changes
-        working-directory: core-translations
-        run: |
-          git add .
           git config user.name "joomlapl-bot"
           git config user.email "joomlapl-bot@users.noreply.github.com"
+          git add .
           git commit -m "Update translations for ${{ github.event.inputs.version }}" || echo "No changes to commit"
           git push origin auto/update-translations-${{ github.event.inputs.version }}
 
-      - name: Upload built package artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: translation-package
-          path: .build/pl-PL_joomla_lang_full_v${{ steps.meta.outputs.JOOMLA_VERSION }}v${{ steps.meta.outputs.TRANSLATION_REVISION }}.zip
-          if-no-files-found: error
-          compression-level: 0
-
   release:
-    name: Draft release
+    needs: [build, sync-translations]
     runs-on: ubuntu-latest
-    needs: build
     permissions:
       contents: write
     steps:
-      - name: Download built package
+      - name: Download translation artifact
         uses: actions/download-artifact@v4
         with:
           name: translation-package
           path: ./dist
 
-      - name: Create draft release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
@@ -139,3 +178,5 @@ jobs:
           tag_name: ${{ github.event.inputs.version }}
           name: ${{ needs.build.outputs.RELEASE_NAME }}
           files: ./dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

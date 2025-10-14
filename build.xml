@@ -4,7 +4,7 @@
     <property file="./build.properties"/>
 
     <php expression="date('Y-m-d')" returnProperty="build.date"/>
-    <php expression="date('Y-m')" returnProperty="build.dateshort"/>
+    <php expression="date('Y-m')" returnProperty="build.dateShort"/>
     <php expression="date('Y')" returnProperty="build.year"/>
     <php expression="substr('${build.version}', 0, strrpos('${build.version}','.'))" returnProperty="build.joomlaPatch"/>
     <php expression="substr('${build.joomlaPatch}', 0, strrpos('${build.joomlaPatch}','.'))" returnProperty="build.joomlaMinor"/>

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Translation version (e.g., 5.4.0.1)"
+        description: "Translation version (e.g. 5.4.0.1)"
         required: true
         type: string
 
@@ -66,10 +66,7 @@ jobs:
           sed -i "s/^build.version=.*/build.version=${{ github.event.inputs.version }}/" build.properties
 
       - name: Build Polish translations
-        run: phing -f build.xml build:lang_polish
-
-      - name: Build core-translations from Crowdin
-        run: phing -f build.xml build:crowdin
+        run: phing -f build.xml build:clean
 
       - name: Find translation ZIP file
         id: package
@@ -128,6 +125,10 @@ jobs:
         working-directory: core-translations
         run: |
           SYNC_VERSION="${{ needs.build.outputs.SYNC_VERSION }}"
+
+          rm -rf joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/*
+          rm -rf joomla_v${SYNC_VERSION}/translations/package/pl-PL/*
+
           echo "Copying translations for Joomla major version: ${SYNC_VERSION}"
 
           mkdir -p joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL
@@ -136,13 +137,13 @@ jobs:
           # Copy installer translations (core)
           if [ -d "../build/core-translations/joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL" ]; then
             cp -r ../build/core-translations/joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/* \
-              joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/ || true
+              joomla_v${SYNC_VERSION}/translations/core/installation/language/pl-PL/
           fi
 
           # Copy package translations
           if [ -d "../build/core-translations/joomla_v${SYNC_VERSION}/translations/package/pl-PL" ]; then
             cp -r ../build/core-translations/joomla_v${SYNC_VERSION}/translations/package/pl-PL/* \
-              joomla_v${SYNC_VERSION}/translations/package/pl-PL/ || true
+              joomla_v${SYNC_VERSION}/translations/package/pl-PL/
           fi
 
       - name: Create auto branch for version

@@ -1,8 +1,8 @@
-name: polish-translation-test
+name: joomla_translation_test_j54
 services:
 
   joomla:
-    image: joomla:5-php8.3-apache
+    image: joomla:5.4
     restart: unless-stopped
     ports:
       - "80:80"
@@ -14,7 +14,7 @@ services:
       JOOMLA_DB_PASSWORD: joomla_db
       JOOMLA_DB_NAME: joomla_db
       JOOMLA_SITE_NAME: Test
-      JOOMLA_ADMIN_EMAIL: webmaster@localhost.pl
+      JOOMLA_ADMIN_EMAIL: webmaster@localhost.com
       JOOMLA_ADMIN_USERNAME: test
       JOOMLA_ADMIN_USER: test
       JOOMLA_ADMIN_PASSWORD: testtesttesttest

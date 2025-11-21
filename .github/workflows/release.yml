@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout main repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -44,7 +44,7 @@ jobs:
           echo "SYNC_VERSION=$SYNC_VERSION" >> $GITHUB_OUTPUT
 
       - name: Checkout base branch in main repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ steps.meta.outputs.BASE_BRANCH }}
           fetch-depth: 0
@@ -97,7 +97,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout fork core-translations
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: JoomlaPolska/core-translations
           token: ${{ secrets.CORE_TRANSLATIONS_PAT }}

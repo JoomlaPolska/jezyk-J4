@@ -75,7 +75,7 @@ jobs:
           echo "ZIP_FILE=$ZIP_FILE" >> $GITHUB_OUTPUT
 
       - name: Upload translation artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: translation-package
           path: ${{ steps.package.outputs.ZIP_FILE }}
@@ -83,7 +83,7 @@ jobs:
           compression-level: 0
 
       - name: Upload core-translations build artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: core-translations
           path: ./.build/core-translations

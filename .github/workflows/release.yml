@@ -116,7 +116,7 @@ jobs:
         run: gh repo sync JoomlaPolska/core-translations --source joomla/core-translations --force
 
       - name: Download built core-translations artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: core-translations
           path: ./build/core-translations
@@ -166,7 +166,7 @@ jobs:
       contents: write
     steps:
       - name: Download translation artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: translation-package
           path: ./dist
